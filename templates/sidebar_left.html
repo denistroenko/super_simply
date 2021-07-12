@@ -1,0 +1,13 @@
+<div class="_sidebar_left">
+    <div class="_sub_menu">
+        <ul>
+            {% for link in submenu.get_menu() %}
+                <li class="">
+                    <a href="{{ link.link }}">
+                        {{ link.caption }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

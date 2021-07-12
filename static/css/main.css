@@ -1,0 +1,78 @@
+* {box-sizing: border-box;}
+
+body {
+    border: 1px solid blue;
+    font-size: 16px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    margin: 7px 0;
+}
+
+._content {
+    padding: 0 5px;
+}
+._container-content {
+    padding: 0 5px;
+}
+._footer {
+    border: 1px solid;
+    min-height: 25px;
+    padding: 0 90px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+._header {
+    border: 1px solid;
+    min-height: 50px;
+    border-radius: 5px;
+}
+._sidebar_left {
+    min-width: 120px;
+    min-height: 30px;
+    border: 1px solid;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+._sidebar_right {
+    min-width: 90px;
+    min-height: 30px;
+    border: 1px solid;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+._main_menu li {
+    padding-right: 5px;
+}
+._main_menu ul {
+    padding: 0 10px;
+    margin: 5px 0 7px 0;
+}
+._main_menu {
+    border: 1px solid;
+    padding: 0 90px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+._sub_menu ul {
+    padding: 0 5px;
+}
+._promo {
+    border: 1px solid;
+    min-height: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+._holidays {
+    border: 1px solid;
+    min-height: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+._slider {
+    border: 1px solid red;
+    min-height: 150px;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+}

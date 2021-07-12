@@ -1,0 +1,11 @@
+<div class="_main_menu">
+    {% if main_menu -%}
+        <ul>
+            {% for m in main_menu -%}
+            <li>
+                <a href="{{ m.link }}">{{ m.caption }}</a>
+            </li>
+            {% endfor -%}
+        </ul>
+    {% endif -%}
+</div>

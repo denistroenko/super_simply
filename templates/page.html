@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+    <head>
+            <meta charset="UTF-8">
+            <meta name="description" content="{{ description }}">
+            <meta name="keywords" content="{{ keywords }}">
+            <title>{{title}}</title>
+            <link rel="stylesheet" href="/static/normalize.css">
+            <link rel="stylesheet" href="/static/{{ css }}">
+            <link rel="stylesheet" href="/static/{{ css_system }}">
+    </head>
+    <body>
+        {{ header | safe }}
+        {{ main_menu | safe }}
+        {{ holidays | safe }}
+        {{ promo | safe }}
+        <div class="_container">
+            {{ sidebar_left | safe }}
+            <div class="_container-content">
+                {{ slider | safe }}
+                {{ content | safe }}
+            </div>
+            {{ sidebar_right | safe }}
+        </div>
+        {{ footer | safe }}
+    </body>
+
+    <script src="/static/{{ js }}"></script>
+    <script src="/static/{{ js_system }}"></script>
+</html>
