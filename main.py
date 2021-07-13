@@ -9,15 +9,15 @@ import pages
 
 
 logger = logging.getLogger(__name__)
-configure_logger(logger)
-logger.debug('# # # # #  Приложение запущено  # # # # #')
 app = Flask(__name__)
 site = Site()
 
 
 def main():
+    configure_logger(logger)
+    logger.debug('# # # # #  Приложение запущено  # # # # #')
     pages.configure_site(site)
-    page = Page('/', 0 , 'home')
+    page = Page(path='/', id=0 , name='home')
 
 
 main()
