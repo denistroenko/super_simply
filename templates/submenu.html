@@ -1,0 +1,11 @@
+<div class="_submenu">
+    <ul>
+        {% for id in page.children %}
+            <li>
+                <a href="{% site.pages[id].path %}">
+                    {% site.pages[id].name %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

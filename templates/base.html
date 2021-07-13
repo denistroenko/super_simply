@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+    <head>
+        {% block head %}
+            <title>
+                {% block title %}
+                {{ page.title }}
+                {% endblock %}
+            </title>
+
+            <meta charset="UTF-8">
+            <meta name="description" content="{% block description %}{% endblock %}">
+            <meta name="keywords" content="{% block keywords %}{% endblock %}">
+
+            <link rel="stylesheet" href="/static/normalize.css">
+            <link rel="stylesheet" href="/static/system.css">
+            <link rel="stylesheet" href="/static/main.css">
+        {% endblock %}
+    </head>
+    <body>
+        {% include 'header.html' %}
+
+        <div class="_container">
+            {% include 'sidebar_left.html' %}
+            <div class="_container-content">
+                {% include 'promo.html' %}
+
+                <h1>{{ page.h1 }}</h1>
+                
+                {% block content %}
+                {% endblock %}
+            </div>
+            {% include 'sidebar_right.html' %}
+        </div>
+        {% include 'footer.html' %}
+    </body>
+    <script src="/static/system.js"></script>
+    <script src="/static/main.js"></script>
+</html>
