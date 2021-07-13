@@ -41,20 +41,20 @@ h1,h2,h3,h4,h5,h6 {
     border-radius: 5px;
     margin-top: 5px;
 }
-._main_menu li {
+._menu li {
     padding-right: 5px;
 }
-._main_menu ul {
+._menu ul {
     padding: 0 10px;
     margin: 5px 0 7px 0;
 }
-._main_menu {
+._menu {
     border: 1px solid;
     padding: 0 90px;
     border-radius: 5px;
     margin-top: 5px;
 }
-._sub_menu ul {
+._submenu ul {
     padding: 0 5px;
 }
 ._promo {

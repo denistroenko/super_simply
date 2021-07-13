@@ -20,24 +20,24 @@
 }
 ._sidebar_right {
 }
-._main_menu li {
+._menu li {
     display: inline-block;
     list-style: none; 
 }
-._main_menu ul {
+._menu ul {
     width: 100%;
 }
-._main_menu {
+._menu {
     width: 100%;
 }
-._sub_menu li {
+._submenu li {
     display: block;
     list-style: none; 
 }
-._sub_menu ul {
+._submenu ul {
     width: 100%;
 }
-._sub_menu {
+._submenu {
     width: 100%;
 }
 ._promo {
@@ -54,7 +54,7 @@
     ._container {
         display: block;
     }
-    ._main_menu {
+    ._menu {
         padding: 0;
     }
     ._footer {
