@@ -1,15 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'base.html'}
 
 {% block title %}
-{{ page.title }}
+Ошибка 404, нет такой страницы
 {% endblock %}
 
 {% block description %}
-{{ page.description }}
 {% endblock %}
 
 {% block keywords %}
-{{ page.keywords }}
 {% endblock %}
 
 {% block head %}
@@ -19,8 +17,6 @@
 
 {% block content %}
 <div class="_content">
-    <h1>{{ page.h1 }}</h1>
-    {% block page_content%}
-    {% endblock %}
+    Что-то пошло не так...
 </div>
 {% endblock %}

@@ -27,13 +27,16 @@ class Site:
                  domain='domain.domain',
                  site_name='Super Simply',
                  ):
-        logger.debug('Инициализация Site')
+        logger.debug('Инициализация <Site>')
         self.pages = {}
+        logger.debug('Конец инициализации')
 
     def add_page(self, page: object):
         id = len(self.pages)
+        logger.debug('<Site>.add_page Смена id у добавляемой страницы')
         page.id = id
         self.pages[page.path] = (page)
+        logger.debug('<Site>.add_page Страница добавлена.')
 
 
 class Page:
@@ -63,7 +66,7 @@ class Page:
                  description='',        # описание (мета-тег) страницы
                  keywords='',           # ключевые слова (мета-тег) страницы
                  ):
-        logger.debug('Инициализация Page')
+        logger.debug('Инициализация <Page>')
 
         self.id = 0
 
@@ -77,6 +80,9 @@ class Page:
         self.keywords = keywords
 
         self.children = []
+
+        logger.debug('Конец инициализации')
+
 
     def __str__(self):
         return str((self.id,

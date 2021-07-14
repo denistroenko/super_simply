@@ -53,7 +53,7 @@ def show_page(page_url):
         return page_url
 
     logger.debug('НЕТ ТАКОЙ')
-    return shadow_site.pages['error 404'].name
+    return shadow_site.pages['404/'].name
 
 
 if __name__ == '__main__':

@@ -13,17 +13,22 @@ configure_logger(logger)
 
 
 def configure_shadow_site(site: object):
+    logger.debug('Конфигурирование "Shadow Site"')
     site.name = 'Shadow Site'
     site.path = ''
     site.domain = 'shadow site'
 
-    site.pages['error 404'] = Page('Error 404',
-                                   '404.html',
-                                   '404.html',
+    site.pages[site.domain] = Empty_page()
+
+    logger.debug('Добавление страницы 404')
+    site.pages['404/'] = Page(name='Error 404',
+                                   path='404/',
+                                   template='404.html',
                                    )
 
 
 def configure_site(site: object):
+    logger.debug('Конфигурирование сайта')
     settings = config_site.get_section_dict('main')
 
     name = 'SUPER SIMPLY'
@@ -42,13 +47,15 @@ def configure_site(site: object):
     site.path = path
     site.domain = domain
 
-    site.pages[domain] = Empty_page()
+    site.pages[site.domain] = Empty_page()
 
 
 def load_pages(site: object):
+    logger.debug('Добавление страниц в сайт')
     settings = config_pages.settings  # dict
 
     for page in settings:
+        logger.debug('Добавление страницы')
         name = 'PAGE NAME'
         if 'name' in settings[page]:
             name = settings[page]['name']
