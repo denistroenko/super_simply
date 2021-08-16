@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+SEO тест - {{ site.name }}
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- Добавочное содержимое к head-->
+{% endblock %}
+
+{% block sidebar_left %}
+<ul>
+    {% for page in site.get_system_pages() %}
+    <li>
+        <a href="{{ page.path }}">{{ page.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+<ul>
+{% for page in site.get_pages() %}
+    <li>
+        <a href="{{ page.path }}">{{ page.name }}</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block sidebar_right %}
+Всего страниц:<br> {{ site.get_pages()|length }}<br></br>
+Всего системных страниц:<br> {{ site.get_system_pages()|length }}<br><br>
+{% endblock %}
+
+{% block content %}
+<div class="_content">
+    <h1>
+        {{ site.name }}
+    </h1>
+    <br>
+    {% for page in site.get_pages() %}
+    <h2>
+        {{  page.title }}
+        <span style="color: 
+        {% if page.title|length <= 60 %}
+            green
+        {% elif page.title|length <=70 %}
+            orange
+        {% else %}
+            red
+        {% endif %}
+        ">
+        ({{ page.title|length }})
+        </span>
+    </h2>
+    <span style="color: darkgray; font-weight: 600;">
+        [id: {{ page.id }}]
+    </span>
+    {% for alias in page.alias_list %}
+    <a href="{{ alias }}">
+        <span style="color: darkgray; font-weight: 300;">
+            {{ alias }}, 
+        </span>
+    </a>
+    {% endfor %}
+    <a href="{{ page.path }}">
+        <span style="color: black; font-weight: 600;">
+            {{ page.path }}
+        </span>
+    </a>
+    <br>
+    <span style="color: black; font-weight: 300;">
+        {% if page.description != '' %}
+            {{ page.description }}
+        {% else %}
+            <span style="color: red;">
+                Нет description
+            </span>
+        {% endif %}
+        
+        <br>
+    </span>
+    <br>
+    {% endfor %}
+</div>
+{% endblock %}
