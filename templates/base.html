@@ -12,25 +12,39 @@
             <meta name="description" content="{% block description %}{% endblock %}">
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
-            <link rel="stylesheet" href="/static/normalize.css">
-            <link rel="stylesheet" href="/static/system.css">
-            <link rel="stylesheet" href="/static/main.css">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/system.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         {% endblock %}
     </head>
     <body>
+        {% block header %}
         {% include 'header.html' %}
+        {% endblock %}
 
         <div class="_container">
-            {% include 'sidebar_left.html' %}
-            <div class="_container-content">
-                {% include 'promo.html' %}
+            <div class="_sidebar_left">
+            {% block sidebar_left %}
+                {% include 'sidebar_left.html' %}
+            {% endblock %}
+            </div>
 
+            <div class="_container-content">
                 {% block content %}
+                {% include 'promo.html' %}
                 {% endblock %}
             </div>
-            {% include 'sidebar_right.html' %}
+
+            <div class="_sidebar_right">
+            {% block sidebar_right %}
+                {% include 'sidebar_right.html' %}
+            {% endblock %}
+            </div>
         </div>
+
+        {% block footer %}
         {% include 'footer.html' %}
+        {% endblock %}
     </body>
     <script src="/static/system.js"></script>
     <script src="/static/main.js"></script>

@@ -1,11 +1,14 @@
 <div class="_submenu">
+    {% if page.subpages != [] %}
     <ul>
-        {% for id in page.children %}
-            <li>
-                <a href="{% site.pages[id].path %}">
-                    {% site.pages[id].name %}
-                </a>
-            </li>
+        {% for subpage in page.subpages %}
+        <li>
+            <a href="{{ subpage.path }}">
+                <img src="{{ subpage.icon }}"></img>
+                {{ subpage.name }}
+            </a>
+        </li>
         {% endfor %}
     </ul>
+    {% endif %}
 </div>

@@ -1,5 +1,5 @@
 import logging
-from super_simply import Page, Empty_page
+from super_simply import Page
 from baseapplib import Config, get_script_dir, configure_logger
 
 
@@ -10,21 +10,6 @@ config_pages= Config()
 config_pages.read_file('%sconfig_pages' % get_script_dir())
 logger = logging.getLogger(__name__)
 configure_logger(logger)
-
-
-def configure_shadow_site(site: object):
-    logger.debug('Конфигурирование "Shadow Site"')
-    site.name = 'Shadow Site'
-    site.path = ''
-    site.domain = 'shadow site'
-
-    site.pages[site.domain] = Empty_page()
-
-    logger.debug('Добавление страницы 404')
-    site.pages['404/'] = Page(name='Error 404',
-                                   path='404/',
-                                   template='404.html',
-                                   )
 
 
 def configure_site(site: object):
@@ -47,8 +32,6 @@ def configure_site(site: object):
     site.path = path
     site.domain = domain
 
-    site.pages[site.domain] = Empty_page()
-
 
 def load_pages(site: object):
     logger.debug('Добавление страниц в сайт')
@@ -56,7 +39,7 @@ def load_pages(site: object):
 
     for page in settings:
         logger.debug('Добавление страницы')
-        name = 'PAGE NAME'
+        name = 'NAME'
         if 'name' in settings[page]:
             name = settings[page]['name']
 
@@ -68,11 +51,11 @@ def load_pages(site: object):
         if 'template' in settings[page]:
             template = settings[page]['template']
 
-        parent = 0
+        parent = -1
         if 'parent' in settings[page]:
-            parent = settings[page]['parent']
+            parent = int(settings[page]['parent'])
 
-        title = ''
+        title=''
         if 'title' in settings[page]:
             title = settings[page]['title']
 
@@ -88,13 +71,52 @@ def load_pages(site: object):
         if 'keywords' in settings[page]:
             keywords = settings[page]['keywords']
 
-        site.add_page(Page(name=name,
-                           path=path,
-                           template=template,
-                           parent=parent,
-                           title=title,
-                           h1=h1,
-                           description=description,
-                           keywords=keywords
-                           )
-                      )
+        visible = True
+        if 'visible' in settings[page]:
+            visible = settings[page]['visible']
+
+        alias_list = []
+        if 'alias_list' in settings[page]:
+            alias_list = settings[page]['alias_list'].split(',')
+
+        img = ''
+        if 'img' in settings[page]:
+            img = settings[page]['img']
+
+        icon = ''
+        if 'icon' in settings[page]:
+            icon = settings[page]['icon']
+
+        new_page = Page(name=name,
+                        path=path,
+                        template=template,
+                        parent=parent,
+                        title=title,
+                        h1=h1,
+                        description=description,
+                        keywords=keywords,
+                        visible=visible,
+                        alias_list=alias_list,
+                        img=img,
+                        icon=icon,
+                        )
+
+        site.add_page(page=new_page)
+
+
+def load_system_pages(site: object):
+    logger.debug('Добавление страницы 404')
+
+    new_page = Page(name='error 404',
+                path='/404',
+                template='404.html',
+                visible=False,
+                )
+    site.add_system_page(page=new_page, key='404')
+
+    new_page = Page(name='seo test',
+                path='/_seo',
+                template='seo.html',
+                visible=False,
+                )
+    site.add_system_page(page=new_page, key='seo')

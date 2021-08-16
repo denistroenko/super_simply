@@ -88,3 +88,24 @@ class dict_value:
         else:
             logger.critical('%s = %s' % (self.__name, value))
             raise ValueError('Неверный тип данных (верный - dict).')
+
+
+class bool_value:
+    """
+    Дескриптор данных (данные типа булево). Вызывает исключение при неверном
+    формате данных при присваивании.
+    """
+
+    def __init__(self, name):
+        self.__name = name
+
+    def __get__(self, instance, owner):
+        return instance.__dict__[self.__name]
+
+    def __set__(self, instance, value):
+        if isinstance(value, bool):
+            instance.__dict__[self.__name] = value
+            logger.debug('%s = %s' % (self.__name, value))
+        else:
+            logger.critical('%s = %s' % (self.__name, value))
+            raise ValueError('Неверный тип данных (верный - bool).')

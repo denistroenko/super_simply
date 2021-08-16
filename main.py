@@ -2,7 +2,7 @@ __version__ = '0.0.1'
 
 
 import logging
-from flask import Flask, url_for
+from flask import Flask, url_for, render_template
 from baseapplib import configure_logger
 from super_simply import Site, Page
 import pages
@@ -11,15 +11,14 @@ import pages
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 site = Site()
-shadow_site = Site()
 
 
 def main():
     configure_logger(logger)
     logger.debug('# # # # #  Приложение запущено  # # # # #')
-    pages.configure_shadow_site(shadow_site)
     pages.configure_site(site)
     pages.load_pages(site)
+    pages.load_system_pages(site)
 
     app.run(
         debug=True,
@@ -30,30 +29,25 @@ def main():
 
 @app.route('/')
 def show_root():
-    page_url = '/'
-
-    logger.debug('Запрошена страница %s' % page_url)
-
-    if page_url in site.pages:
-        logger.debug('ЕСТЬ ТАКАЯ')
-        return page_url
-
-    logger.debug('НЕТ ТАКОЙ')
-    return shadow_site.pages['error 404'].name
-
+    return show_page('')
 
 @app.route('/<page_url>/')
 def show_page(page_url):
-    page_url += '/'
-
+    page_url = '/' + page_url
     logger.debug('Запрошена страница %s' % page_url)
 
-    if page_url in site.pages:
-        logger.debug('ЕСТЬ ТАКАЯ')
-        return page_url
+    page = site.get_page(page_url)
 
-    logger.debug('НЕТ ТАКОЙ')
-    return shadow_site.pages['404/'].name
+    for key in site.system_pages:
+        if site.system_pages[key].path == page_url:
+            logger.debug('Возвращается специальная страница сайта.')
+            page = site.system_pages[key]
+
+
+    return render_template(page.template,
+                           site=site,
+                           page=page,
+                           )
 
 
 if __name__ == '__main__':
