@@ -20,12 +20,6 @@ def main():
     pages.load_pages(site)
     pages.load_system_pages(site)
 
-    app.run(
-        debug=True,
-        host='192.168.88.1',
-        port=80,
-    )
-
 
 @app.route('/')
 def show_root():
@@ -50,5 +44,10 @@ def show_page(page_url):
                            )
 
 
+main()
+
 if __name__ == '__main__':
-    main()
+    app.run(debug=True,
+            host='192.168.88.1',
+            port=80,
+            )
