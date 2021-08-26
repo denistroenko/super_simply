@@ -14,78 +14,76 @@ configure_logger(logger)
 
 def configure_site(site: object):
     logger.debug('Конфигурирование сайта')
-    settings = config_site.get_section_dict('main')
 
-    name = 'SUPER SIMPLY'
+    site.name='Super Simply'
+    site.domain=''
+
+    try:
+        settings = config_site.get_section_dict('main')
+    except KeyError:
+        return
+
     if 'name' in settings:
-        name = settings['name']
+        site.name = settings['name']
 
-    path = ''
     if 'path' in settings:
-        path = settings['path']
+        site.path = settings['path']
 
-    domain = ''
     if 'domain' in settings:
-        domain = settings['domain']
-
-    site.name = name
-    site.path = path
-    site.domain = domain
+        site.domain = settings['domain']
 
 
 def load_pages(site: object):
     logger.debug('Добавление страниц в сайт')
     settings = config_pages.settings  # dict
 
-    for page in settings:
+    for page_name in settings:
         logger.debug('Добавление страницы')
-        name = 'NAME'
-        if 'name' in settings[page]:
-            name = settings[page]['name']
+        name = page_name
 
         path = '/'
-        if 'path' in settings[page]:
-            path = settings[page]['path']
+        if 'path' in settings[page_name]:
+            path = settings[page_name]['path']
 
-        template = 'page.html'
-        if 'template' in settings[page]:
-            template = settings[page]['template']
+        template = 'page_name.html'
+        if 'template' in settings[page_name]:
+            template = settings[page_name]['template']
 
         parent = -1
-        if 'parent' in settings[page]:
-            parent = int(settings[page]['parent'])
+        if 'parent' in settings[page_name]:
+            parent = int(settings[page_name]['parent'])
 
-        title=''
-        if 'title' in settings[page]:
-            title = settings[page]['title']
+        title = '{} - {} {}'.format(name, site.name, site.domain)
+        if 'title' in settings[page_name]:
+            title = settings[page_name]['title']
 
         h1 = ''
-        if 'h1' in settings[page]:
-            h1 = settings[page]['h1']
+        if 'h1' in settings[page_name]:
+            h1 = settings[page_name]['h1']
 
         description = ''
-        if 'description' in settings[page]:
-            description = settings[page]['description']
+        if 'description' in settings[page_name]:
+            description = settings[page_name]['description']
 
         keywords = ''
-        if 'keywords' in settings[page]:
-            keywords = settings[page]['keywords']
+        if 'keywords' in settings[page_name]:
+            keywords = settings[page_name]['keywords']
 
         visible = True
-        if 'visible' in settings[page]:
-            visible = settings[page]['visible']
+        if 'visible' in settings[page_name]:
+            visible = settings[page_name]['visible']
 
         alias_list = []
-        if 'alias_list' in settings[page]:
-            alias_list = settings[page]['alias_list'].split(',')
+        if 'alias_list' in settings[page_name]:
+            alias_list = settings[page_name]['alias_list'].split(',')
 
         img = ''
-        if 'img' in settings[page]:
-            img = settings[page]['img']
+        if 'img' in settings[page_name]:
+            img = settings[page_name]['img']
 
         icon = ''
-        if 'icon' in settings[page]:
-            icon = settings[page]['icon']
+        if 'icon' in settings[page_name]:
+            icon = settings[page_name]['icon']
 
         new_page = Page(name=name,
                         path=path,
