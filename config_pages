@@ -1,0 +1,4 @@
+[Главная]
+path = /
+template = welcome.html
+title = Welcome to Super Simply!

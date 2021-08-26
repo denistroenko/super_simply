@@ -11,16 +11,11 @@ import pages
 
 # GLOBAL
 # Extra files
-FLASK_RUN_EXTRA_FILES = ['./config_site',
-                         './config_pages',
-                        ]
-
-
+FLASK_RUN_EXTRA_FILES = ['./config_site', './config_pages']
 # Logger
 logger = logging.getLogger(__name__)
 # App
 app = Flask(__name__)
-
 # Site
 site = Site()
 
