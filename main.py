@@ -2,6 +2,7 @@ __version__ = '0.0.1'
 
 
 import logging
+import datetime
 from typing import Optional
 from flask import Flask, url_for, render_template
 from baseapplib import configure_logger
@@ -11,7 +12,7 @@ import pages
 
 # GLOBAL
 # Extra files
-FLASK_RUN_EXTRA_FILES = ['./config_site', './config_pages']
+FLASK_RUN_EXTRA_FILES = ['./config/config_site', './config/config_pages']
 # Logger
 logger = logging.getLogger(__name__)
 # App
@@ -53,7 +54,7 @@ def show_page(page_url):
             logger.debug('Возвращается специальная страница сайта.')
             page = site.system_pages[key]
 
-
+    site.add_info(key='year', info=datetime.date.today().year)
     return render_template(page.template,
                            site=site,
                            page=page,

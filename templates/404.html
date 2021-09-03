@@ -1,22 +1,9 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Ошибка 404, нет такой страницы
-{% endblock %}
-
-{% block description %}
-{% endblock %}
-
-{% block keywords %}
-{% endblock %}
-
-{% block head %}
-{{ super() }}
-<!-- Добавочное содержимое к head-->
+Страница не найдена - {{ site.name }}
 {% endblock %}
 
 {% block content %}
-<div class="_content">
-    Что-то пошло не так...
-</div>
+Что-то пошло не так...
 {% endblock %}

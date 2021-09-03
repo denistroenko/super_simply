@@ -1,12 +1,12 @@
-<div class="_menu">
-    <ul>
-        {% for page in site.pages %}
-        <li>
+<ul>
+    {% for page in site.pages %}
+    <li>
+        {% if page.icon %}
             <img src="{{ page.icon }}"></img>
-            <a href="{{ page.path }}">
-                {{ page.name }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+        {% endif %}
+        <a href="{{ page.path }}">
+            {{ page.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>

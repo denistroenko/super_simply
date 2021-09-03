@@ -1,6 +1,9 @@
 ._hidden {
     display: none !important;
 }
+.breadcrumbs {
+    display: block;
+}
 ._container {
     display: flex;
 }

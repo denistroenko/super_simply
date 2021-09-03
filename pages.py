@@ -15,8 +15,11 @@ configure_logger(logger)
 def configure_site(site: object):
     logger.debug('Конфигурирование сайта')
 
-    site.name='Super Simply'
-    site.domain=''
+    site.name = 'Super Simply'
+    site.domain = 'localhost'
+    site.author = 'Super Simply'
+    site.phone = ''
+    site.address = ''
 
     try:
         settings = config_site.get_section_dict('main')
@@ -26,11 +29,17 @@ def configure_site(site: object):
     if 'name' in settings:
         site.name = settings['name']
 
-    if 'path' in settings:
-        site.path = settings['path']
-
     if 'domain' in settings:
         site.domain = settings['domain']
+
+    if 'author' in settings:
+        site.author = settings['author']
+
+    if 'phone' in settings:
+        site.phone = settings['phone']
+
+    if 'address' in settings:
+        site.address = settings['address']
 
 
 def load_pages(site: object):
@@ -39,13 +48,12 @@ def load_pages(site: object):
 
     for page_name in settings:
         logger.debug('Добавление страницы')
-        name = page_name
 
         path = '/'
         if 'path' in settings[page_name]:
             path = settings[page_name]['path']
 
-        template = 'page_name.html'
+        template = 'page.html'
         if 'template' in settings[page_name]:
             template = settings[page_name]['template']
 
@@ -53,15 +61,19 @@ def load_pages(site: object):
         if 'parent' in settings[page_name]:
             parent = int(settings[page_name]['parent'])
 
-        title = '{} - {} {}'.format(name, site.name, site.domain)
+        title = '{} - {} {}'.format(page_name, site.name, site.domain)
         if 'title' in settings[page_name]:
             title = settings[page_name]['title']
 
-        h1 = ''
+        h1 = page_name
         if 'h1' in settings[page_name]:
             h1 = settings[page_name]['h1']
 
-        description = ''
+        description = '{} {} {} {}'.format(site.name,
+                                           h1,
+                                           site.address,
+                                           site.phone,
+                                           )
         if 'description' in settings[page_name]:
             description = settings[page_name]['description']
 
@@ -73,9 +85,9 @@ def load_pages(site: object):
         if 'visible' in settings[page_name]:
             visible = settings[page_name]['visible']
 
-        alias_list = []
-        if 'alias_list' in settings[page_name]:
-            alias_list = settings[page_name]['alias_list'].split(',')
+        aliases = []
+        if 'aliases' in settings[page_name]:
+            aliases = settings[page_name]['aliases'].split(',')
 
         img = ''
         if 'img' in settings[page_name]:
@@ -85,7 +97,7 @@ def load_pages(site: object):
         if 'icon' in settings[page_name]:
             icon = settings[page_name]['icon']
 
-        new_page = Page(name=name,
+        new_page = Page(name=page_name,
                         path=path,
                         template=template,
                         parent=parent,
@@ -94,7 +106,7 @@ def load_pages(site: object):
                         description=description,
                         keywords=keywords,
                         visible=visible,
-                        alias_list=alias_list,
+                        aliases=aliases,
                         img=img,
                         icon=icon,
                         )
@@ -106,15 +118,13 @@ def load_system_pages(site: object):
     logger.debug('Добавление страницы 404')
 
     new_page = Page(name='error 404',
-                path='/404',
-                template='404.html',
-                visible=False,
-                )
+                    path='/404',
+                    template='404.html',
+                    )
     site.add_system_page(page=new_page, key='404')
 
     new_page = Page(name='seo test',
-                path='/_seo',
-                template='seo.html',
-                visible=False,
-                )
-    site.add_system_page(page=new_page, key='seo')
+                    path='/_seo',
+                    template='seo.html',
+                    )
+    site.add_system_page(page=new_page, key='_seo')
