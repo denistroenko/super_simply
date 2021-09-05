@@ -104,6 +104,9 @@ def load_pages(site: object):
         if 'icon' in settings[name]:
             icon = settings[name]['icon']
 
+        if 'name' in settings[name]:
+            name = settings[name]['name']
+
         new_page = Page(name=name,
                         path=path,
                         template=template,
