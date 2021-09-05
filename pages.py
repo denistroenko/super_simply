@@ -5,9 +5,13 @@ from baseapplib import Config, get_script_dir, configure_logger
 
 # Global
 config_site = Config()
-config_site.read_file('%sconfig/config_site' % get_script_dir())
+config_site.read_file('%sconfig/config_site' % get_script_dir(),
+                      comment='"""',
+                      )
 config_pages= Config()
-config_pages.read_file('%sconfig/config_pages' % get_script_dir())
+config_pages.read_file('%sconfig/config_pages' % get_script_dir(),
+                       comment='"""'
+                       )
 logger = logging.getLogger(__name__)
 configure_logger(logger)
 
