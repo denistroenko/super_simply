@@ -25,8 +25,8 @@ def main():
     configure_logger(logger)
     logger.debug('# # # # #  Приложение запущено  # # # # #')
     pages.configure_site(site)
-    pages.load_pages(site)
     pages.load_system_pages(site)
+    pages.load_pages(site)
 
 
 def run_local_app(host: Optional[str] = None,
