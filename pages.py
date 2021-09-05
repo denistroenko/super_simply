@@ -26,20 +26,23 @@ def configure_site(site: object):
     except KeyError:
         return
 
-    if 'name' in settings:
-        site.name = settings['name']
-
-    if 'domain' in settings:
-        site.domain = settings['domain']
-
-    if 'author' in settings:
-        site.author = settings['author']
-
-    if 'phone' in settings:
-        site.phone = settings['phone']
-
-    if 'address' in settings:
-        site.address = settings['address']
+    for key in settings:
+        if key == 'name':
+            site.name = settings[key]
+        elif key == 'domain':
+            site.domain = settings[key]
+        elif key == 'author':
+            site.author = settings[key]
+        elif key == 'phone':
+            site.phone = settings[key]
+        elif key == 'tel':
+            site.tel = settings[key]
+        elif key == 'email':
+            site.email = settings[key]
+        elif key == 'address':
+            site.address = settings[key]
+        else:
+            site.info[key] = settings[key]
 
 
 def load_pages(site: object):

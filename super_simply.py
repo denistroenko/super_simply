@@ -23,20 +23,26 @@ class Site:
     info = dict_value('info')
     author = str_value('author')
     phone = str_value('phone')
+    tel = str_value('tel')
+    email = str_value('email')
     address = str_value('address')
+    info = dict_value('info')
 
     def __init__(self,
                  domain='domain.domain',
                  site_name='Super Simply',
                  ):
         logger.debug('Инициализация <Site>')
-        self.pages = []  # свойство "страницы"
-        self.system_pages = {}  # свойство "специальные страницы"
-        self.total_pages = 0  # счетчик страниц сайта
-        self.info = {}  # словарь информации сервера
-        self.author = ''
-        self.phone = ''
-        self.address = ''
+        self.pages = []         # "страницы" - список объектов страниц
+        self.system_pages = {}  # "спец. страницы" - объекты страниц (словарь)
+        self.total_pages = 0    # счетчик страниц сайта
+        self.info = {}          # словарь информации сервера
+        self.author = ''        # авторство
+        self.phone = ''         # телефон сайта
+        self.tel = ''           # телефон сайта для ссылки вида <a href="tel:">
+        self.email = ''         # адрес электронной почты
+        self.address = ''       # адрес офиса
+        self.info = {}          # прочая информация (словарь)
         logger.debug('Конец инициализации')
 
     def __fill_page_breadcrumbs(self, page: object):
