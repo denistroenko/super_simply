@@ -1,3 +1,4 @@
 [Главная]
 path = /
 template = welcome.html
+parent = r

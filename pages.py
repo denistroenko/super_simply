@@ -63,7 +63,10 @@ def load_pages(site: object):
 
         parent = -1
         if 'parent' in settings[name]:
-            parent = int(settings[name]['parent'])
+            try:
+                parent = int(settings[name]['parent'])
+            except ValueError:
+                logger.error('В файле конфигурации страниц parent - не число!')
 
         title = '{} - {} {}'.format(name, site.name, site.domain)
         if 'title' in settings[name]:
