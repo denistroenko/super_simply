@@ -16,11 +16,10 @@ class Site:
     # Свойства класса (через дескрипторы)
     name = str_value('name')
     domain = str_value('domain')
-    path = str_value('path')
     pages = list_value('pages')
     system_pages = dict_value('system_pages')
     total_pages = int_value('total_pages')
-    info = dict_value('info')
+    server = dict_value('server')
     author = str_value('author')
     phone = str_value('phone')
     tel = str_value('tel')
@@ -28,15 +27,14 @@ class Site:
     address = str_value('address')
     info = dict_value('info')
 
-    def __init__(self,
-                 domain='domain.domain',
-                 site_name='Super Simply',
-                 ):
+    def __init__(self):
         logger.debug('Инициализация <Site>')
+        self.name = ''          # Имя сайта
+        self.domain = ''        # домен сайта
         self.pages = []         # "страницы" - список объектов страниц
         self.system_pages = {}  # "спец. страницы" - объекты страниц (словарь)
         self.total_pages = 0    # счетчик страниц сайта
-        self.info = {}          # словарь информации сервера
+        self.server = {}        # словарь информации сервера
         self.author = ''        # авторство
         self.phone = ''         # телефон сайта
         self.tel = ''           # телефон сайта для ссылки вида <a href="tel:">
