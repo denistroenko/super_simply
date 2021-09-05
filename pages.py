@@ -17,9 +17,6 @@ def configure_site(site: object):
 
     site.name = 'Super Simply'
     site.domain = 'localhost'
-    site.author = 'Super Simply'
-    site.phone = ''
-    site.address = ''
 
     try:
         settings = config_site.get_section_dict('main')

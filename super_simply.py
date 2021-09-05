@@ -132,8 +132,11 @@ class Site:
 
         return pages
 
-    def add_info(self, info, key) -> None:
-        self.info[key] = info
+    def add_server_info(self, info, key) -> None:
+        """
+        Добавляет ключ:значение к словарю Site.serer
+        """
+        self.server[key] = info
 
     def get_page(self, id) -> object:
         """
