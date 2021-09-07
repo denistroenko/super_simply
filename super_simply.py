@@ -27,6 +27,7 @@ class Site:
     address = str_value('address')
     info = dict_value('info')
     carousels = list_value('carousels')
+    galleries = list_value('galleries')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -43,6 +44,7 @@ class Site:
         self.address = ''       # адрес офиса
         self.info = {}          # прочая информация (словарь)
         self.carousels = []     # "карусели" - список объектов карусель
+        self.galleries = []     # "галереи" - список объектов галерей
         logger.debug('Конец инициализации')
 
     def __fill_page_breadcrumbs(self, page: object) -> None:
@@ -111,6 +113,12 @@ class Site:
         Добавляет карусель к коллекции каруселей сайта
         """
         self.carousels.append(carousel)
+
+    def add_gallery(self, gallery: object) -> None:
+        """
+        Добавляет галерею (объект) в список галерей сайта
+        """
+        self.galleries.append(gallery)
 
     def get_pages(self) -> list:
         """
@@ -238,26 +246,6 @@ class Page:
         raise ValueError('Неверный формат данных (верный - object).')
 
 
-class Carousel:
-    """
-    Класс карусели
-    """
-    slides = list_value('slides')
-    name = str_value('name')
-
-    def __init__(self,
-                 name: str,
-                 ):
-        self.slides = []  # слайды карусели
-        self.name = name  # имя карусели
-
-    def add_slide(self, slide: object) -> None:
-        """
-        Добавляет слайд к сгайдам карусели
-        """
-        self.slides.append(slide)
-
-
 class Slide:
     """
     Базовый класс слайда
@@ -292,13 +280,58 @@ class Carousel_slide(Slide):
         self.description = description
 
 
+class Carousel:
+    """
+    Класс карусели
+    """
+    slides = list_value('slides')
+    name = str_value('name')
+
+    def __init__(self,
+                 name: str,
+                 ):
+        self.slides = []  # слайды карусели
+        self.name = name  # имя карусели
+
+    def add_slide(self, slide: object) -> None:
+        """
+        Добавляет слайд к слайдам карусели
+        """
+        self.slides.append(slide)
+
+
+class Gallery:
+    """
+    Класс галереи
+    """
+    name = str_value('name')
+    __folder = str_value('folder')
+    slides = list_value('slides')
+
+    def add_slide(self, slide: object) -> None:
+        """
+        Добавляет слайд к галерее
+        """
+        self.slides.append(slide)
+
+    def __load_slides(self):
+        """
+        Загружает слайды из папки
+        """
+        folder = self.__folder
+        pass
+
+    def __init__(self, name: str, folder: str):
+        self.name = name
+        self.__folder = folder
+        self.slides =[]
+        # загрузить слайды
+        self.__load_slides()
+
+
 class Block:
     pass
 
 
 class Promo_card:
-    pass
-
-
-class Gallery:
     pass
