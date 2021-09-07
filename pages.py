@@ -5,11 +5,11 @@ from baseapplib import Config, get_script_dir, configure_logger
 
 # Global
 config_site = Config()
-config_site.read_file('%sconfig/config_site' % get_script_dir(),
+config_site.read_file('%sconfig/site' % get_script_dir(),
                       comment='//',
                       )
 config_pages= Config()
-config_pages.read_file('%sconfig/config_pages' % get_script_dir(),
+config_pages.read_file('%sconfig/pages' % get_script_dir(),
                        comment='//',
                        )
 logger = logging.getLogger(__name__)
@@ -50,22 +50,23 @@ def load_pages(site: object):
     logger.debug('Добавление страниц в сайт')
     settings = config_pages.settings  # dict
 
-    # Умолчания
-    path = '/'
-    template = 'page.html'
-    parent = -1
-    title = '{} - {} {}'.format(name, site.name, site.domain)
-    h1 = name
-    description = '{} {} {} {}'.format(site.name, h1, site.address, site.phone)
-    keywords = ''
-    visible = True
-    aliases = []
-    img = ''
-    icon = ''
-
     # проходим по именам секций
     for name in settings:
         logger.debug('Добавление страницы %s' % name)
+
+        # Умолчания
+        path = '/'
+        template = 'page.html'
+        parent = -1
+        title = '{} - {} {}'.format(name, site.name, site.domain)
+        h1 = name
+        description = '{} {} {} {}'.format(site.name, h1, site.address, site.phone)
+        keywords = ''
+        visible = True
+        aliases = []
+        image = ''
+        icon = ''
+
         # проходим по параметрам секций
         for parameter in settings[name]:
             value = settings[name][parameter]
@@ -80,7 +81,8 @@ def load_pages(site: object):
                 try:
                     parent = int(value)
                 except ValueError:
-                    logger.error('В файле конфигурации страниц parent - не число!')
+                    logger.error(
+                            'В файле конфигурации страниц parent - не число!')
                 continue
             elif value == 'title':
                 title = value
@@ -101,12 +103,12 @@ def load_pages(site: object):
                 aliases = value
                 continue
             elif value == 'image'
-                img = value
+                image = value
                 continue
-            elif value ==
+            elif value == 'icon'
                 icon = value
                 continue
-            elif value ==
+            elif value == 'name'
                 name = value
                 continue
 
@@ -120,7 +122,7 @@ def load_pages(site: object):
                         keywords=keywords,
                         visible=visible,
                         aliases=aliases,
-                        img=img,
+                        image=image,
                         icon=icon,
                         )
 
