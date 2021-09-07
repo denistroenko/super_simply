@@ -85,45 +85,44 @@ def load_pages(site: object) -> None:
         # проходим по параметрам секций (свойства страниц)
         for parameter in settings[name]:
             value = settings[name][parameter]
-
-            if value == 'path':
+            if parameter == 'path':
                 path = value
                 continue
-            elif value == 'template':
+            elif parameter == 'template':
                 template = value
                 continue
-            elif value == 'parent':
+            elif parameter == 'parent':
                 try:
                     parent = int(value)
                 except ValueError:
                     logger.error(
                             'В файле конфигурации страниц parent - не число!')
                 continue
-            elif value == 'title':
+            elif parameter == 'title':
                 title = value
                 continue
-            elif value == 'h1':
+            elif parameter == 'h1':
                 h1 = value
                 continue
-            elif value == 'description':
+            elif parameter == 'description':
                 description = value
                 continue
-            elif value == 'keywords':
+            elif parameter == 'keywords':
                 keywords = value
                 continue
-            elif value == 'visible':
+            elif parameter == 'visible':
                 visible = value
                 continue
-            elif value == 'aliases':
+            elif parameter == 'aliases':
                 aliases = value
                 continue
-            elif value == 'image':
+            elif parameter == 'image':
                 image = value
                 continue
-            elif value == 'icon':
+            elif parameter == 'icon':
                 icon = value
                 continue
-            elif value == 'name':
+            elif parameter == 'name':
                 name = value
                 continue
 
@@ -192,9 +191,9 @@ def load_carousels(site: object) -> None:
             i = 0
             for attribute in slide_attributes:
                 if i == 0:
-                    link = attribute
+                    image = '/static/img/%s' % attribute
                 if i == 1:
-                    image = '%sstatic/img/%s' % (get_script_dir(), attribute)
+                    link = attribute
                 if i == 2:
                     title = attribute
                 if i == 3:
@@ -207,4 +206,3 @@ def load_carousels(site: object) -> None:
 
         # добавить карусель к сайту
         site.add_carousel(carousel)
-

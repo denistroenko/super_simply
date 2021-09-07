@@ -1,4 +1,8 @@
 [Главная]
 path = /
 template = welcome.html
-parent = r
+
+
+[тест]
+path = /test
+template = page.html

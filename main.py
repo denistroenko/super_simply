@@ -27,6 +27,7 @@ def main():
     pages.configure_site(site)
     pages.load_system_pages(site)
     pages.load_pages(site)
+    pages.load_carousels(site)
 
 
 def run_local_app(host: Optional[str] = None,

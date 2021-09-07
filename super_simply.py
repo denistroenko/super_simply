@@ -75,7 +75,7 @@ class Site:
         """
         return self.system_pages[key]
 
-    def get_system_pages(self) -> list(object):
+    def get_system_pages(self) -> list:
         """
         Возвращает список объектов всех спец. страниц.
         """
@@ -112,13 +112,13 @@ class Site:
         """
         self.carousels.append(carousel)
 
-    def get_pages(self) -> list(object):
+    def get_pages(self) -> list:
         """
         Возвращает все страницы сайта и все их подстраницы (список обхектов).
         """
         pages = []  # инициализация ПОЛНОГО списка ВСЕХ страниц сайта
 
-        def __get_subpages(page) -> list(object):
+        def __get_subpages(page) -> list:
             """
             функция возвращает всe подстраницы страницы,
             а так же подстраницы ее подстраниц

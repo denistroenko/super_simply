@@ -5,13 +5,13 @@
 <div>Super Simply - сайты создавать просто...</div>
 
 
-{% for carousel in site.carousels}
+{% for carousel in site.carousels %}
     {% for slide in carousel.slides %}
-        {{ slide.name }}<br>
-        {{ slide.image }}<br>
-        {{ slide.link }}<br>
         {{ slide.title }}<br>
-        {{ slide.description }}<br>
+        <a href="{{ slide.link }}">
+            <img src="{{ slide.image }}">
+            {{ slide.description }}<br>
+        </a>
         <br>
     {% endfor %}
     <br>
