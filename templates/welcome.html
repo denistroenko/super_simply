@@ -3,4 +3,19 @@
 {% block content %}
 {{ super() }}
 <div>Super Simply - сайты создавать просто...</div>
+
+
+{% for carousel in site.carousels}
+    {% for slide in carousel.slides %}
+        {{ slide.name }}<br>
+        {{ slide.image }}<br>
+        {{ slide.link }}<br>
+        {{ slide.title }}<br>
+        {{ slide.description }}<br>
+        <br>
+    {% endfor %}
+    <br>
+{% endfor %}
+
+
 {% endblock %}

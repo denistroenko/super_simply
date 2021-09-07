@@ -1,24 +1,36 @@
 import logging
-from super_simply import Page
+from super_simply import Page, Carousel, Carousel_slide
 from baseapplib import Config, get_script_dir, configure_logger
 
 
 # Global
+# Site config
 config_site = Config()
 config_site.read_file('%sconfig/site' % get_script_dir(),
                       comment='//',
                       )
+# Pages config
 config_pages= Config()
 config_pages.read_file('%sconfig/pages' % get_script_dir(),
                        comment='//',
                        )
+# Cariusels config
+config_carousels = Config()
+config_carousels.read_file('%sconfig/carousels' % get_script_dir(),
+                       comment='//',
+                       )
+# Logger
 logger = logging.getLogger(__name__)
 configure_logger(logger)
 
 
-def configure_site(site: object):
+def configure_site(site: object) -> None:
+    """
+    Загружает конфигурацию сайта (передать объект сайта)
+    """
     logger.debug('Конфигурирование сайта')
 
+    # умолчания
     site.name = 'Super Simply'
     site.domain = 'localhost'
 
@@ -46,11 +58,14 @@ def configure_site(site: object):
             site.info[key] = settings[key]
 
 
-def load_pages(site: object):
+def load_pages(site: object) -> None:
+    """
+    Загружает конфигурацию страниц сайта (передать объект сайта)
+    """
     logger.debug('Добавление страниц в сайт')
     settings = config_pages.settings  # dict
 
-    # проходим по именам секций
+    # проходим по именам секций (имена страниц)
     for name in settings:
         logger.debug('Добавление страницы %s' % name)
 
@@ -67,7 +82,7 @@ def load_pages(site: object):
         image = ''
         icon = ''
 
-        # проходим по параметрам секций
+        # проходим по параметрам секций (свойства страниц)
         for parameter in settings[name]:
             value = settings[name][parameter]
 
@@ -87,28 +102,28 @@ def load_pages(site: object):
             elif value == 'title':
                 title = value
                 continue
-            elif value == 'h1'
+            elif value == 'h1':
                 h1 = value
                 continue
-            elif value == 'description'
+            elif value == 'description':
                 description = value
                 continue
-            elif value == 'keywords'
+            elif value == 'keywords':
                 keywords = value
                 continue
-            elif value == 'visible'
+            elif value == 'visible':
                 visible = value
                 continue
-            elif value == 'aliases'
+            elif value == 'aliases':
                 aliases = value
                 continue
-            elif value == 'image'
+            elif value == 'image':
                 image = value
                 continue
-            elif value == 'icon'
+            elif value == 'icon':
                 icon = value
                 continue
-            elif value == 'name'
+            elif value == 'name':
                 name = value
                 continue
 
@@ -129,7 +144,10 @@ def load_pages(site: object):
         site.add_page(page=new_page)
 
 
-def load_system_pages(site: object):
+def load_system_pages(site: object) -> None:
+    """
+    Создает системные страницы сайта (передать объект сайта)
+    """
     logger.debug('Добавление страницы 404')
 
     new_page = Page(name='error 404',
@@ -143,3 +161,50 @@ def load_system_pages(site: object):
                     template='seo.html',
                     )
     site.add_system_page(page=new_page, key='_seo')
+
+
+def load_carousels(site: object) -> None:
+    """
+    Загружает конфигурацию каруселей сайта (передать объект сайта)
+    """
+    settings = config_carousels.settings
+    # Проходим по именам секций (имена каруселей)
+    for name in settings:
+        carousel = Carousel(name)
+
+        # Проходим по параметрам секций (имена слайдов)
+        # и загружаем слайды в карусель
+        for slide in settings[name]:
+            value = settings[name][slide]
+
+            # умолчания
+            image = ''
+            link = "#"
+            title = ''
+            description = ''
+
+            # Атрибуты слайда получаем через split значения параметра
+            # по аргументу |
+            slide_attributes = value.split('|')
+
+            # Проходим по атрибутам слайда
+            # init count
+            i = 0
+            for attribute in slide_attributes:
+                if i == 0:
+                    link = attribute
+                if i == 1:
+                    image = '%sstatic/img/%s' % (get_script_dir(), attribute)
+                if i == 2:
+                    title = attribute
+                if i == 3:
+                    description = attribute
+                i += 1
+
+            slide = Carousel_slide(image=image, link=link, title=title,
+                                   description=description)
+            carousel.add_slide(slide=slide)
+
+        # добавить карусель к сайту
+        site.add_carousel(carousel)
+
