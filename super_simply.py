@@ -43,7 +43,7 @@ class Site:
         self.info = {}          # прочая информация (словарь)
         logger.debug('Конец инициализации')
 
-    def __fill_page_breadcrumbs(self, page: object):
+    def __fill_page_breadcrumbs(self, page: object) -> None:
         """
         Заполняет свойство breadcrumbs переданного объекта page, исходя из
         цепочки его родителей.
@@ -53,7 +53,7 @@ class Site:
 
         parents = []
 
-        def append_parent(parent_page: object):
+        def append_parent(parent_page: object) -> None:
             parents.append(parent_page)
             if parent_page.parent != -1:
                 append_parent(self.get_page(parent_page.parent))
@@ -61,7 +61,7 @@ class Site:
         append_parent(self.get_page(page.parent))
         page.breadcrumbs = parents[::-1]
 
-    def add_system_page(self, page: object, key: str):
+    def add_system_page(self, page: object, key: str) -> None:
         """
         Доавляет спец. страницу на сайт (передать объект страницы и ключ).
         """
@@ -73,7 +73,7 @@ class Site:
         """
         return self.system_pages[key]
 
-    def get_system_pages(self) -> list:
+    def get_system_pages(self) -> list(object):
         """
         Возвращает список объектов всех спец. страниц.
         """
@@ -84,7 +84,7 @@ class Site:
 
         return pages
 
-    def add_page(self, page: object):
+    def add_page(self, page: object) -> None:
         """
         Добавляет страницу либо к страницам сайта, либо к подстраницам
         конкретной страницы (в зависимости от атрибута parent передаваемого
@@ -104,14 +104,17 @@ class Site:
             parent.add_subpage(page)
             logger.debug('Страница добавлена как подстраница.')
 
-    def get_pages(self) -> list:
+    def get_pages(self) -> list(object):
         """
         Возвращает все страницы сайта и все их подстраницы (список обхектов).
         """
         pages = []  # инициализация ПОЛНОГО списка ВСЕХ страниц сайта
 
-        def get_subpages(page):  # функция возвращает все подстраницы страницы,
-                                 # а так же подстраницы ее подстраниц
+        def __get_subpages(page) -> list(object):
+            """
+            функция возвращает всe подстраницы страницы,
+            а так же подстраницы ее подстраниц
+            """
             subpages = []
 
             def fill_subpages(page):  # рекурсивная функция заполнения списка
@@ -127,7 +130,7 @@ class Site:
         # добавить к списку всех страниц страницы и подстраницы сайта
         for page in self.pages:
             pages.append(page)
-            subpages = get_subpages(page)
+            subpages = __get_subpages(page)
             pages += subpages
 
         return pages
@@ -156,6 +159,7 @@ class Site:
 
         # Вернуть страницу 404
         return self.get_system_page('404')
+
 
 class Page:
     """
@@ -216,26 +220,81 @@ class Page:
 
         logger.debug('Конец инициализации')
 
-
-    # def __str__(self):
-        # return str((self.id,
-                   # self.name,
-                   # self.path,
-                   # self.template,
-                   # self.parent,
-                   # self.title,
-                   # self.h1,
-                   # self.description,
-                   # self.keywords,
-                   # )
-                  # )
-
-    def add_subpage(self, page: object):
+    def add_subpage(self, page: object) -> None:
         """
         Добавляет объект страницы к списку в атрибуте self.subpages.
         """
-
         if isinstance(page, object):
             self.subpages.append(page)
             return
         raise ValueError('Неверный формат данных (верный - object).')
+
+
+class Carusel():
+    """
+    Класс карусели
+    """
+    slides = list_value('slides')
+    name = str_value('name')
+
+    def __init__(self,
+                 name: str,
+                 ):
+        self.slides = []  # слайды карусели
+        self.name = name  # имя карусели
+
+    def add_slide(self, slide: object) -> None:
+        """
+        Добавляет слайд к сгайдам карусели
+        """
+        self.slides.append(slide)
+
+
+class Slide():
+    """
+    Базовый класс слайда
+    """
+    image = str_value('image')
+
+    def __init__(self,
+                 image: str,  # путь к изображению
+                 ):
+        self.image = image
+
+
+class Carusel_slide(Slide):
+    """
+    Слайд карусели
+    """
+    link = str_value('link')
+    title = str_value('title')
+    description = str_value('description')
+
+    def __init__(self,
+                 image: str,            # путь к изображению
+                 link: str = '#',       # ссылка (url Для клика)
+                 title: str = '',       # заголовок слайда
+                 description: str = '', # описание слайда
+                 ):
+        # __init__ базового класса
+        Slide.__init__(self, image=image)
+
+        self.link = link
+        self.title = title
+        self.description = description
+
+
+class Block():
+    pass
+
+
+class Promo_card():
+    pass
+
+
+class Gallery():
+    pass
+
+
+class Gallery_slide():
+    pass
