@@ -26,6 +26,7 @@ class Site:
     email = str_value('email')
     address = str_value('address')
     info = dict_value('info')
+    carousels = list_value('carousels')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -41,6 +42,7 @@ class Site:
         self.email = ''         # адрес электронной почты
         self.address = ''       # адрес офиса
         self.info = {}          # прочая информация (словарь)
+        self.carousels = []     # "карусели" - список объектов карусель
         logger.debug('Конец инициализации')
 
     def __fill_page_breadcrumbs(self, page: object) -> None:
@@ -103,6 +105,12 @@ class Site:
             parent = self.get_page(page.parent)
             parent.add_subpage(page)
             logger.debug('Страница добавлена как подстраница.')
+
+    def add_carousel(self, carousel: object) -> None:
+        """
+        Добавляет карусель к коллекции каруселей сайта
+        """
+        self.carousels.append(carousel)
 
     def get_pages(self) -> list(object):
         """
@@ -230,7 +238,7 @@ class Page:
         raise ValueError('Неверный формат данных (верный - object).')
 
 
-class Carusel():
+class Carousel:
     """
     Класс карусели
     """
@@ -250,7 +258,7 @@ class Carusel():
         self.slides.append(slide)
 
 
-class Slide():
+class Slide:
     """
     Базовый класс слайда
     """
@@ -262,7 +270,7 @@ class Slide():
         self.image = image
 
 
-class Carusel_slide(Slide):
+class Carousel_slide(Slide):
     """
     Слайд карусели
     """
@@ -284,17 +292,13 @@ class Carusel_slide(Slide):
         self.description = description
 
 
-class Block():
+class Block:
     pass
 
 
-class Promo_card():
+class Promo_card:
     pass
 
 
-class Gallery():
-    pass
-
-
-class Gallery_slide():
+class Gallery:
     pass
