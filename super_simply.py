@@ -188,7 +188,7 @@ class Page:
     subpages = list_value('subpages')
     visible = bool_value('visible')
     aliases = list_value('aliases')
-    img = str_value('img')
+    image = str_value('image')
     icon = str_value('icon')
 
     def __init__(self,
@@ -202,8 +202,8 @@ class Page:
                  description: str = '', # описание (мета-тег) страницы
                  keywords: str = '',    # ключевые слова (мета-тег) страницы
                  visible:  bool = True, # видимость в меню
-                 aliases: list = [], # псевдонимы страницы (список path)
-                 img: str = '',         # относительный путь к картинке
+                 aliases: list = [],    # псевдонимы страницы (список path)
+                 image: str = '',       # относительный путь к картинке
                  icon: str = '',        # относитеьный путь к иконке
                  ):
         logger.debug('Инициализация <Page>')
@@ -221,7 +221,7 @@ class Page:
         self.keywords = keywords
         self.visible = visible
         self.aliases = aliases
-        self.img =  img
+        self.image =  image
         self.icon = icon
 
         self.subpages = []

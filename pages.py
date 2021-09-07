@@ -50,62 +50,65 @@ def load_pages(site: object):
     logger.debug('Добавление страниц в сайт')
     settings = config_pages.settings  # dict
 
+    # Умолчания
+    path = '/'
+    template = 'page.html'
+    parent = -1
+    title = '{} - {} {}'.format(name, site.name, site.domain)
+    h1 = name
+    description = '{} {} {} {}'.format(site.name, h1, site.address, site.phone)
+    keywords = ''
+    visible = True
+    aliases = []
+    img = ''
+    icon = ''
+
+    # проходим по именам секций
     for name in settings:
-        logger.debug('Добавление страницы')
+        logger.debug('Добавление страницы %s' % name)
+        # проходим по параметрам секций
+        for parameter in settings[name]:
+            value = settings[name][parameter]
 
-        path = '/'
-        if 'path' in settings[name]:
-            path = settings[name]['path']
-
-        template = 'page.html'
-        if 'template' in settings[name]:
-            template = settings[name]['template']
-
-        parent = -1
-        if 'parent' in settings[name]:
-            try:
-                parent = int(settings[name]['parent'])
-            except ValueError:
-                logger.error('В файле конфигурации страниц parent - не число!')
-
-        title = '{} - {} {}'.format(name, site.name, site.domain)
-        if 'title' in settings[name]:
-            title = settings[name]['title']
-
-        h1 = name
-        if 'h1' in settings[name]:
-            h1 = settings[name]['h1']
-
-        description = '{} {} {} {}'.format(site.name,
-                                           h1,
-                                           site.address,
-                                           site.phone,
-                                           )
-        if 'description' in settings[name]:
-            description = settings[name]['description']
-
-        keywords = ''
-        if 'keywords' in settings[name]:
-            keywords = settings[name]['keywords']
-
-        visible = True
-        if 'visible' in settings[name]:
-            visible = settings[name]['visible']
-
-        aliases = []
-        if 'aliases' in settings[name]:
-            aliases = settings[name]['aliases'].split(',')
-
-        img = ''
-        if 'img' in settings[name]:
-            img = settings[name]['img']
-
-        icon = ''
-        if 'icon' in settings[name]:
-            icon = settings[name]['icon']
-
-        if 'name' in settings[name]:
-            name = settings[name]['name']
+            if value == 'path':
+                path = value
+                continue
+            elif value == 'template':
+                template = value
+                continue
+            elif value == 'parent':
+                try:
+                    parent = int(value)
+                except ValueError:
+                    logger.error('В файле конфигурации страниц parent - не число!')
+                continue
+            elif value == 'title':
+                title = value
+                continue
+            elif value == 'h1'
+                h1 = value
+                continue
+            elif value == 'description'
+                description = value
+                continue
+            elif value == 'keywords'
+                keywords = value
+                continue
+            elif value == 'visible'
+                visible = value
+                continue
+            elif value == 'aliases'
+                aliases = value
+                continue
+            elif value == 'image'
+                img = value
+                continue
+            elif value ==
+                icon = value
+                continue
+            elif value ==
+                name = value
+                continue
 
         new_page = Page(name=name,
                         path=path,
