@@ -1,8 +1,3 @@
 [Главная]
 path = /
 template = welcome.html
-
-
-[тест]
-path = /test
-template = page.html

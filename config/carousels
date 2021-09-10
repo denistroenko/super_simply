@@ -1,8 +1,0 @@
-[Первая карусель]
-имя слайда 1 = image1.1.jpg|/|TITLE_1|DESCRIPTION_1|SAME
-имя слайда 2 = test.png|/test|TITLE_2|DESCRIPTION_2|SAME
-
-[Вторая карусель]
-имя слайда 1 = image2.1.jpg|/|TITLE_1|DESCRIPTION_1|SAME
-имя слайда 2 = image2.2.jpg|/|TITLE_2|DESCRIPTION_2|SAME
-имя слайда 3 = image2.3.jpg|/|TITLE_3|DESCRIPTION_3|SAME
