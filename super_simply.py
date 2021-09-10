@@ -42,7 +42,7 @@ class Site:
         self.tel = ''           # телефон сайта для ссылки вида <a href="tel:">
         self.email = ''         # адрес электронной почты
         self.address = ''       # адрес офиса
-        self.info = {}          # прочая информация (словарь)
+        self.info = {}          # любая прочая информация (словарь)
         self.carousels = []     # "карусели" - список объектов карусель
         self.galleries = []     # "галереи" - список объектов галерей
         logger.debug('Конец инициализации')
@@ -198,6 +198,7 @@ class Page:
     aliases = list_value('aliases')
     image = str_value('image')
     icon = str_value('icon')
+    info = dict_value('info')
 
     def __init__(self,
                  name: str,             # имя страницы для ссылок
@@ -213,6 +214,7 @@ class Page:
                  aliases: list = [],    # псевдонимы страницы (список path)
                  image: str = '',       # относительный путь к картинке
                  icon: str = '',        # относитеьный путь к иконке
+                 info: dict = {},       # любая прочая информация (словарь)
                  ):
         logger.debug('Инициализация <Page>')
 
@@ -231,6 +233,7 @@ class Page:
         self.aliases = aliases
         self.image =  image
         self.icon = icon
+        self.info = info
 
         self.subpages = []
 
@@ -316,21 +319,21 @@ class Gallery:
 
     def __load_slides(self):
         """
-        Загружает слайды из папки
+        Загружает слайды из папки (информацию о файлах)
         """
         folder = self.__folder
         pass
 
-    def __init__(self, name: str, folder: str):
+    def __init__(self, name: str,           # имя галереи
+                 folder: str,               # папка с  файлами для галереи
+                 auto_load: bool = True,    # автозагрузка галереи при создании
+                 ):
         self.name = name
         self.__folder = folder
         self.slides =[]
         # загрузить слайды
-        self.__load_slides()
-
-
-class Block:
-    pass
+        if auto_load:
+            self.__load_slides()
 
 
 class Promo_card:

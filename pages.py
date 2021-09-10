@@ -81,6 +81,7 @@ def load_pages(site: object) -> None:
         aliases = []
         image = ''
         icon = ''
+        info = None
 
         # проходим по параметрам секций (свойства страниц)
         for parameter in settings[name]:
@@ -125,6 +126,8 @@ def load_pages(site: object) -> None:
             elif parameter == 'name':
                 name = value
                 continue
+            else:
+                info = (parameter, value)
 
         new_page = Page(name=name,
                         path=path,
@@ -139,6 +142,8 @@ def load_pages(site: object) -> None:
                         image=image,
                         icon=icon,
                         )
+        if info not is None:
+            new_page.info[info[0]] = info[1]
 
         site.add_page(page=new_page)
 
@@ -189,7 +194,7 @@ def load_carousels(site: object) -> None:
             # Проходим по атрибутам слайда
             # init count
             i = 0
-            for attribute in slide_attributes:
+            For attribute in slide_attributes:
                 if i == 0:
                     image = '/static/img/%s' % attribute
                 if i == 1:
