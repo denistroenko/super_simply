@@ -90,7 +90,7 @@ def load_pages(site: object) -> None:
         for parameter in settings[name]:
             value = settings[name][parameter]
             if parameter == 'path':
-                path = value if value != ''
+                path = value
                 continue
             elif parameter == 'template':
                 template = value
