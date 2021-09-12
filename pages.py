@@ -142,7 +142,7 @@ def load_pages(site: object) -> None:
                         image=image,
                         icon=icon,
                         )
-        if info != None:
+        if info is not None:
             new_page.info[info[0]] = info[1]
 
         site.add_page(page=new_page)
