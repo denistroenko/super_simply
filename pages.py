@@ -190,6 +190,7 @@ def load_carousels(site: object) -> None:
             link = "#"
             title = ''
             description = ''
+            info = {}
 
             # Атрибуты слайда получаем через split значения параметра
             # по аргументу |
@@ -201,16 +202,32 @@ def load_carousels(site: object) -> None:
             for attribute in slide_attributes:
                 if i == 0:
                     image = '/static/img/%s' % attribute
-                if i == 1:
+                elif i == 1:
                     link = attribute
-                if i == 2:
+                elif i == 2:
                     title = attribute
-                if i == 3:
+                elif i == 3:
                     description = attribute
+                else:
+                    # разделить attribute по знаку =
+                    attribute = attribute.split('=')
+                    # отдельно сохраняем разделенные части
+                    info_name = attribute[0]
+                    info_value = attribute[1]
+                    # добавляем в локальный словарь info эти значения как key,
+                    # value
+                    info[info_name] = info_value
                 i += 1
 
             slide = Carousel_slide(image=image, link=link, title=title,
                                    description=description)
+            # если локальный словарь info заполнен, то пройти по нему и
+            # заполнить соответственно словарь slide.info
+            if info != {}:
+                for key in info:
+                    slide[key] = info[key]
+
+            # Добавить слайд к карусели
             carousel.add_slide(slide=slide)
 
         # добавить карусель к сайту
