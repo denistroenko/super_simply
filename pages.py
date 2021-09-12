@@ -46,6 +46,8 @@ def configure_site(site: object) -> None:
             site.domain = settings[key]
         elif key == 'author':
             site.author = settings[key]
+        elif key == 'company':
+            site.company = settings[key]
         elif key == 'phone':
             site.phone = settings[key]
         elif key == 'tel':
@@ -70,12 +72,13 @@ def load_pages(site: object) -> None:
         logger.debug('Добавление страницы %s' % name)
 
         # Умолчания
-        path = '/'
+        path = '#'
         template = 'page.html'
         parent = -1
         title = '{} - {} {}'.format(name, site.name, site.domain)
         h1 = name
-        description = '{} {} {} {}'.format(site.name, h1, site.address, site.phone)
+        description = '{} {} {} {}'.format(
+                site.name, h1, site.address, site.phone)
         keywords = ''
         visible = True
         aliases = []
@@ -87,7 +90,7 @@ def load_pages(site: object) -> None:
         for parameter in settings[name]:
             value = settings[name][parameter]
             if parameter == 'path':
-                path = value
+                path = value if value != ''
                 continue
             elif parameter == 'template':
                 template = value

@@ -20,6 +20,7 @@ class Site:
     system_pages = dict_value('system_pages')
     total_pages = int_value('total_pages')
     server = dict_value('server')
+    company = str_value('company')
     author = str_value('author')
     phone = str_value('phone')
     tel = str_value('tel')
@@ -37,9 +38,10 @@ class Site:
         self.system_pages = {}  # "спец. страницы" - объекты страниц (словарь)
         self.total_pages = 0    # счетчик страниц сайта
         self.server = {}        # словарь информации сервера
+        self.company = ''       # название компании
         self.author = ''        # авторство
         self.phone = ''         # телефон сайта
-        self.tel = ''           # телефон сайта для ссылки вида <a href="tel:">
+        self.tel = ''           # телефон сайта для href ссылки
         self.email = ''         # адрес электронной почты
         self.address = ''       # адрес офиса
         self.info = {}          # любая прочая информация (словарь)
