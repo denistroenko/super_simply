@@ -7,17 +7,17 @@ from baseapplib import Config, get_script_dir, configure_logger
 # Site config
 config_site = Config()
 config_site.read_file('%sconfig/site' % get_script_dir(),
-                      comment='//',
+                      comment='#',
                       )
 # Pages config
 config_pages= Config()
 config_pages.read_file('%sconfig/pages' % get_script_dir(),
-                       comment='//',
+                       comment='#',
                        )
 # Cariusels config
 config_carousels = Config()
 config_carousels.read_file('%sconfig/carousels' % get_script_dir(),
-                       comment='//',
+                       comment='#',
                        )
 # Logger
 logger = logging.getLogger(__name__)
@@ -90,7 +90,8 @@ def load_pages(site: object) -> None:
         for parameter in settings[name]:
             value = settings[name][parameter]
             if parameter == 'path':
-                path = value
+                if value != '':
+                    path = value
                 continue
             elif parameter == 'template':
                 template = value
