@@ -221,11 +221,9 @@ def load_carousels(site: object) -> None:
 
             slide = Carousel_slide(image=image, link=link, title=title,
                                    description=description)
-            # если локальный словарь info заполнен, то пройти по нему и
-            # заполнить соответственно словарь slide.info
+            # заполнить словарь slide.info, если есть, чем
             if info != {}:
-                for key in info:
-                    slide.info[key] = info[key]
+                slide.info = info
 
             # Добавить слайд к карусели
             carousel.add_slide(slide=slide)
