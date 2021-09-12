@@ -270,7 +270,7 @@ class Carousel_slide(Slide):
     link = str_value('link')
     title = str_value('title')
     description = str_value('description')
-    info = dict_value('info')
+    info = dict_value('carousel_slide_info')
 
     def __init__(self,
                  image: str,            # путь к изображению
@@ -285,6 +285,7 @@ class Carousel_slide(Slide):
         self.link = link
         self.title = title
         self.description = description
+        self.info = info
 
 
 class Carousel:

@@ -225,7 +225,7 @@ def load_carousels(site: object) -> None:
             # заполнить соответственно словарь slide.info
             if info != {}:
                 for key in info:
-                    slide[key] = info[key]
+                    slide.info[key] = info[key]
 
             # Добавить слайд к карусели
             carousel.add_slide(slide=slide)
