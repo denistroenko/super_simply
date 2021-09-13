@@ -284,7 +284,7 @@ class Carousel_slide(Slide):
         # __init__ базового класса
         Slide.__init__(self, image=image)
 
-        self.name- name
+        self.name = name
         self.link = link
         self.title = title
         self.description = description
