@@ -6,19 +6,19 @@ from baseapplib import Config, get_script_dir, configure_logger
 # Global
 # Site config
 config_site = Config()
-config_site.read_file('%sconfig/site' % get_script_dir(),
+config_site.read_file(full_path='%sconfig/site' % get_script_dir(),
                       comment='#',
                       )
 # Pages config
 config_pages= Config()
-config_pages.read_file('%sconfig/pages' % get_script_dir(),
+config_pages.read_file(full_path='%sconfig/pages' % get_script_dir(),
                        comment='#',
                        )
 # Cariusels config
 config_carousels = Config()
-config_carousels.read_file('%sconfig/carousels' % get_script_dir(),
-                       comment='#',
-                       )
+config_carousels.read_file(full_path='%sconfig/carousels' % get_script_dir(),
+                           comment='#',
+                           )
 # Logger
 logger = logging.getLogger(__name__)
 configure_logger(logger)
@@ -177,13 +177,13 @@ def load_carousels(site: object) -> None:
     """
     settings = config_carousels.settings
     # Проходим по именам секций (имена каруселей)
-    for name in settings:
-        carousel = Carousel(name)
+    for carousel_name in settings:
+        carousel = Carousel(carousel_name)
 
         # Проходим по параметрам секций (имена слайдов)
         # и загружаем слайды в карусель
-        for slide in settings[name]:
-            value = settings[name][slide]
+        for slide_name in settings[carousel_name]:
+            value = settings[carousel_name][slide_name]
 
             # умолчания
             image = ''
@@ -219,8 +219,12 @@ def load_carousels(site: object) -> None:
                     info[info_name] = info_value
                 i += 1
 
-            slide = Carousel_slide(image=image, link=link, title=title,
-                                   description=description)
+            slide = Carousel_slide(name=slide_name,
+                                   image=image,
+                                   link=link,
+                                   title=title,
+                                   description=description,
+                                   )
             # заполнить словарь slide.info, если есть, чем
             if info != {}:
                 slide.info = info

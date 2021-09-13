@@ -267,12 +267,14 @@ class Carousel_slide(Slide):
     """
     Слайд карусели
     """
+    name = str_value('name')
     link = str_value('link')
     title = str_value('title')
     description = str_value('description')
     info = dict_value('carousel_slide_info')
 
     def __init__(self,
+                 name: str,             # имя слайда
                  image: str,            # путь к изображению
                  link: str = '#',       # ссылка (url Для клика)
                  title: str = '',       # заголовок слайда
@@ -282,6 +284,7 @@ class Carousel_slide(Slide):
         # __init__ базового класса
         Slide.__init__(self, image=image)
 
+        self.name- name
         self.link = link
         self.title = title
         self.description = description
