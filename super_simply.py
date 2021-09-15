@@ -153,7 +153,7 @@ class Site:
 
         return pages
 
-    def add_server_info(self, info, key) -> None:
+    def add_server_info(self, key, info) -> None:
         """
         Добавляет ключ:значение к словарю Site.serer
         """

@@ -55,7 +55,7 @@ def show_page(page_url):
             logger.debug('Возвращается специальная страница сайта.')
             page = site.system_pages[key]
 
-    site.add_server_info(key='year', info=datetime.date.today().year)
+    site.add_server_info(key='year', info=int(datetime.date.today().year))
     return render_template(page.template,
                            site=site,
                            page=page,

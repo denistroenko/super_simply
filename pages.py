@@ -203,7 +203,8 @@ def load_carousels(site: object) -> None:
                 if i == 0:
                     image = '/static/img/%s' % attribute
                 elif i == 1:
-                    link = attribute
+                    if attribute:
+                        link = attribute
                 elif i == 2:
                     title = attribute
                 elif i == 3:
