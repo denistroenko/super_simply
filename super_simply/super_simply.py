@@ -344,5 +344,7 @@ class Gallery:
             self.__load_slides()
 
 
+
+
 class Promo_card:
     pass

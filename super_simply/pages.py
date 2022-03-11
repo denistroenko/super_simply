@@ -14,7 +14,7 @@ config_pages= Config()
 config_pages.read_file(full_path='%sconfig/pages' % get_script_dir(),
                        comment='#',
                        )
-# Cariusels config
+# Carousels config
 config_carousels = Config()
 config_carousels.read_file(full_path='%sconfig/carousels' % get_script_dir(),
                            comment='#',
