@@ -6,7 +6,7 @@ import datetime
 from typing import Optional
 from flask import Flask, url_for, render_template
 from baseapplib import configure_logger
-from super_simply import Site, Page
+from classes import Site, Page
 import pages
 
 

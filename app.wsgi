@@ -18,7 +18,7 @@ def get_script_dir(follow_symlinks=True):
 
 # Change dir to curent app dir
 sys.path.insert(0, get_script_dir())
+sys.path.append('./super_simply/')
 
 # Application
-from main import app as application
-
+from super_simply.main import app as application

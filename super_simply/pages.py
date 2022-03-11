@@ -1,5 +1,5 @@
 import logging
-from super_simply import Page, Carousel, Carousel_slide
+from classes import Page, Carousel, Carousel_slide
 from baseapplib import Config, get_script_dir, configure_logger
 
 
