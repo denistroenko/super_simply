@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}
+SEO-тест - {{ site.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="">
+        <h3>Специальные</h3>
+        {% for page in site.get_system_pages() %}
+            <a href="{{ page.path }}">{{ page.name }}</a>
+            <span> | </span>
+        {% endfor %}
+    </div>
+
+    <div class="">
+        <h3>Страницы сайта</h3>
+        {% for page in site.get_pages() %}
+            <a href="{{ page.path }}">{{ page.name }}</a>
+            <span> | </span>
+        {% endfor %}
+    </div>
+
+    <div class="">
+        <h3>Всего страниц</h3>
+        Всего системных страниц: {{ site.get_system_pages()|length }}<br>
+        Всего страниц: {{ site.get_pages()|length }}<br>
+    </div>
+
+    <hr>
+
+    <div class="">
+        <h1>
+            {{ site.name }}
+        </h1>
+    </div>
+
+    <div class="">
+        {% for page in site.get_pages() %}
+            <h2>
+                {{  page.title }}
+                <span style="color: 
+                {% if page.title|length <= 60 %}
+                    green
+                {% elif page.title|length <=70 %}
+                    orange
+                {% else %}
+                    red
+                {% endif %}
+                ">
+                ({{ page.title|length }})
+                </span>
+            </h2>
+            <span style="color: darkgray; font-weight: 600;">
+                [id: {{ page.id }}]
+            </span>
+            {% for alias in page.alias_list %}
+                <a href="{{ alias }}">
+                    <span style="color: darkgray; font-weight: 300;">
+                        {{ alias }}, 
+                    </span>
+                </a>
+            {% endfor %}
+            <a href="{{ page.path }}">
+                <span style="color: black; font-weight: 600;">
+                    {{ page.path }}
+                </span>
+            </a>
+            <br>
+            <span style="color: black; font-weight: 300;">
+                {% if page.description != '' %}
+                    {{ page.description }}
+                {% else %}
+                    <span style="color: red;">
+                        Нет description
+                    </span>
+                {% endif %}
+                
+                <br>
+            </span>
+        {% endfor %}
+    </div>
+{% endblock %}

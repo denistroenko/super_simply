@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+    <head>
+        <title>
+            {% block title %}{{ page.title }}{% endblock %}
+        </title>
+
+        <meta charset="UTF-8">
+        <meta name="description" content="{% block description %}{{ page.description }}{% endblock %}">
+        <meta name="keywords" content="{% block keywords %}{{ page.keywords }}{% endblock %}">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/system.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
+
+    <body>
+
+        <div class="_header">
+            <div class="_menu">
+                {% include 'header.html' %}
+            </div>
+        </div>
+
+        {% include 'breadcrumbs.html' %}
+
+        <div class="_container">
+            <div class="_sidebar_left">
+                {% include 'sidebar_left.html' %}
+            </div>
+
+            <div class="_container-content">
+                {% block content %}
+                <div class="_slider">
+                    {% include 'slider.html' %}
+                </div>
+                <div class="_promo">
+                    {% include 'promo.html' %}
+                </div>
+                {% endblock %}
+            </div>
+
+            <div class="_sidebar_right">
+                {% include 'sidebar_right.html' %}
+            </div>
+        </div>
+
+        <div class="_footer">
+            <div class="_copyright">
+                {% include 'footer.html' %}
+            </div>
+        </div>
+    </body>
+
+    <script src="/static/system.js"></script>
+    <script src="/static/main.js"></script>
+</html>

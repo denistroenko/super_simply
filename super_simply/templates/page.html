@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ super() }}
+{% endblock %}
+
+{% block description %}
+{{ super() }}
+{% endblock %}
+
+{% block keywords %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="_content">
+    {% if page.image %}
+        <img src="{{ page.image  }}">
+    {% endif %}
+    <h1>{{ page.h1 }}</h1>
+</div>
+{% endblock %}
