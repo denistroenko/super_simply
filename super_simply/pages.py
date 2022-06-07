@@ -1,22 +1,22 @@
 import logging
 from classes import Page, Carousel, Carousel_slide
-from baseapplib import Config, get_script_dir, configure_logger
-
+from baseapplib import get_script_dir, configure_logger
+from config import Config
 
 # Global
 # Site config
 config_site = Config()
-config_site.read_file(full_path='%sconfig/site' % get_script_dir(),
+config_site.read_file(config_file='%sconfig/site' % get_script_dir(),
                       comment='#',
                       )
 # Pages config
 config_pages= Config()
-config_pages.read_file(full_path='%sconfig/pages' % get_script_dir(),
+config_pages.read_file(config_file='%sconfig/pages' % get_script_dir(),
                        comment='#',
                        )
 # Carousels config
 config_carousels = Config()
-config_carousels.read_file(full_path='%sconfig/carousels' % get_script_dir(),
+config_carousels.read_file(config_file='%sconfig/carousels' % get_script_dir(),
                            comment='#',
                            )
 # Logger

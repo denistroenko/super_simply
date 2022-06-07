@@ -178,6 +178,76 @@ class Site:
         # Вернуть страницу 404
         return self.get_system_page('404')
 
+    def generate_translit_path(rus_name: str) -> str:
+        # Rules and liters
+        english_liters = 'qwertyuiopasdfghjklzxcvbnm'
+        translit_rules = {'а': 'a',
+                          'б': 'b',
+                          'в': 'v',
+                          'г': 'g',
+                          'д': 'd',
+                          'е': 'e',
+                          'ё': 'e',
+                          'ж': 'g',
+                          'з': 'z',
+                          'и': 'i',
+                          'й': 'j',
+                          'к': 'k',
+                          'л': 'l',
+                          'м': 'm',
+                          'н': 'n',
+                          'о': 'o',
+                          'п': 'p',
+                          'р': 'r',
+                          'с': 's',
+                          'т': 't',
+                          'у': 'u',
+                          'ф': 'f',
+                          'х': 'h',
+                          'ц': 'ts',
+                          'ч': 'ch',
+                          'ш': 'sh',
+                          'щ': 'sh',
+                          'ъ': '',
+                          'ы': 'y',
+                          'ь': '',
+                          'э': 'e',
+                          'ю': 'yu',
+                          'я': 'ya',
+                          }
+        # lower
+        rus_name = rus_name.lower()
+
+        # init
+        eng_name = ''
+
+        # change symbols from rules
+        for letter in rus_name:
+            if letter in english_liters:
+                eng_name += letter
+                continue
+
+            if letter in translit_rules:
+                eng_name += translit_rules[letter]
+            else:
+                eng_name += '-'
+
+        # replace doubles and 0, -1 indexes
+        while '--' in eng_name:
+            eng_name = eng_name.replace('--', '-')
+
+        if eng_name[0] == '-':
+            eng_name = eng_name[1:]
+
+        if eng_name[-1] == '-':
+            eng_name = eng_name[:-1]
+
+        # double pages
+        #double_pages_postfix = ''
+        #while self.get_page()
+
+        return eng_name
+
 
 class Page:
     """
