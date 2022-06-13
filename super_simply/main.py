@@ -4,10 +4,10 @@ __version__ = '0.0.1'
 import logging
 import datetime
 from typing import Optional
-from flask import Flask, url_for, render_template
+from flask import Flask, render_template
 from baseapplib import configure_logger
-from classes import Site, Page
-import pages
+import super_simply
+import custom
 
 
 # GLOBAL
@@ -18,16 +18,20 @@ logger = logging.getLogger(__name__)
 # App
 app = Flask(__name__)
 # Site
-site = Site()
+site = super_simply.Site()
 
 
 def main():
-    configure_logger(logger)
+    configure_logger(logger,
+                     debug_file_name='./log/debug.log',
+                     error_file_name='./log/error.log',
+                     )
     logger.debug('# # # # #  Приложение запущено  # # # # #')
-    pages.configure_site(site)
-    pages.load_system_pages(site)
-    pages.load_pages(site)
-    pages.load_carousels(site)
+    super_simply.configure_site(site)
+    super_simply.load_system_pages(site)
+    super_simply.load_pages(site)
+    super_simply.load_carousels(site)
+    custom.load()
 
 
 def run_local_app(host: Optional[str] = None,
@@ -42,6 +46,7 @@ def run_local_app(host: Optional[str] = None,
 @app.route('/')
 def show_root():
     return show_page('')
+
 
 @app.route('/<path:page_url>/')
 def show_page(page_url):
@@ -63,6 +68,7 @@ def show_page(page_url):
 
 
 main()
+
 
 if __name__ == '__main__':
     run_local_app(host='192.168.88.1',

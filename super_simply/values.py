@@ -3,7 +3,11 @@ from baseapplib import configure_logger
 
 
 logger = logging.getLogger(__name__)
-configure_logger(logger)
+
+configure_logger(logger,
+                 debug_file_name='./log/debug.log',
+                 error_file_name='./log/error.log',
+                 )
 
 
 class int_value:
