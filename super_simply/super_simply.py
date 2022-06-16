@@ -1,4 +1,6 @@
 import logging
+import glob
+import os.path
 from baseapplib import get_script_dir, configure_logger
 from config import Config
 from values import int_value, str_value, list_value, dict_value, bool_value
@@ -47,7 +49,7 @@ class Site:
     address = str_value('address')
     info = dict_value('info')
     carousels = list_value('carousels')
-    galleries = list_value('galleries')
+    albums = dict_value('albums')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -65,7 +67,7 @@ class Site:
         self.address = ''       # адрес офиса
         self.info = {}          # любая прочая информация (словарь)
         self.carousels = []     # "карусели" - список объектов карусель
-        self.galleries = []     # "галереи" - список объектов галерей
+        self.albums = {}        # "альбомы" - словарь имен:объектов альбомов
         logger.debug('Конец инициализации')
 
     def __fill_page_breadcrumbs(self, page: object) -> None:
@@ -135,11 +137,12 @@ class Site:
         """
         self.carousels.append(carousel)
 
-    def add_gallery(self, gallery: object) -> None:
+    def add_album(self, album: object) -> None:
         """
-        Добавляет галерею (объект) в список галерей сайта
+        Добавляет имя (строку) и альбом (объект) в словарь альбомов сайта
         """
-        self.galleries.append(gallery)
+        # присвоить ключ:значение, т.е. имя альбома:объект альбома
+        self.albums[album.name] = album
 
     def get_pages(self) -> list:
         """
@@ -345,19 +348,28 @@ class Slide:
     """
     Базовый класс слайда
     """
-    image = str_value('image')
+    name = str_value('name')
+    src = str_value('src')
 
     def __init__(self,
-                 image: str,  # путь к изображению
+                 name: str, # название слайда
+                 path: str,  # полный путь к изображению
                  ):
-        self.image = image
+
+        # имя слайда без расширения
+        self.name = str(name.split('.')[0])
+
+        script_dir = get_script_dir()
+
+        # путь к файлу - от текущей директории скрипта
+        path = path[len(script_dir)-1:]
+        self.src = path
 
 
 class Carousel_slide(Slide):
     """
     Слайд карусели
     """
-    name = str_value('name')
     link = str_value('link')
     title = str_value('title')
     description = str_value('description')
@@ -372,9 +384,8 @@ class Carousel_slide(Slide):
                  info = {},             # прочая информация (словарь)
                  ):
         # __init__ базового класса
-        Slide.__init__(self, image=image)
+        Slide.__init__(self, name=name, path=image)
 
-        self.name = name
         self.link = link
         self.title = title
         self.description = description
@@ -401,12 +412,12 @@ class Carousel:
         self.slides.append(slide)
 
 
-class Gallery:
+class Album:
     """
-    Класс галереи
+    Класс альбома
     """
     name = str_value('name')
-    __folder = str_value('folder')
+    __path = str_value('folder')
     slides = list_value('slides')
 
     def add_slide(self, slide: object) -> None:
@@ -415,30 +426,48 @@ class Gallery:
         """
         self.slides.append(slide)
 
-    def __load_slides(self):
+    def __load_slides(self, sort_slides: bool = True):
         """
         Загружает слайды из папки (информацию о файлах)
         """
-        folder = self.__folder
-        pass
+        folder = self.__path
 
-    def __init__(self, name: str,           # имя галереи
-                 folder: str,               # папка с  файлами для галереи
-                 auto_load: bool = True,    # автозагрузка галереи при создании
+        jpg_files = glob.glob(f'{folder}/**/*.jpg', recursive=True)
+        jpeg_files = glob.glob(f'{folder}/**/*.jpeg', recursive=True)
+        png_files = glob.glob(f'{folder}/**/*.png', recursive=True)
+
+        files = jpg_files + jpeg_files + png_files
+        if sort_slides:
+            files = sorted(files)
+
+        for file_path in files:
+            slide=Slide(os.path.basename(file_path),
+                        file_path)
+
+            self.add_slide(slide)
+
+    def __init__(self, name: str,           # имя альбома
+                 path: str,                 # полный путь альбома в ФС
+                 auto_load: bool = True,    # автозагрузка при создании
+                 sort_slides: bool = True,  # сортировать слайды в альбоме
                  ):
+        self.slides =[]                     # слайды альбома (список)
         self.name = name
-        self.__folder = folder
-        self.slides =[]
+        self.__path = path
+
         # загрузить слайды
         if auto_load:
-            self.__load_slides()
+            self.__load_slides(sort_slides=sort_slides)
+
+    def get_path(self):
+        """
+        Метод возвращает полный путь к альбому в рамках ФС
+        """
+        return(self.__path)
 
 
 class Promo_card:
     pass
-
-
-
 
 
 def configure_site(site: object) -> None:
@@ -652,3 +681,42 @@ def load_carousels(site: object) -> None:
 
         # добавить карусель к сайту
         site.add_carousel(carousel)
+
+
+def load_albums(site: object) -> None:
+    """
+    Функция создает альбомы и подключает к сайту в свойство site.albums,
+    заполняет альбомы найденными фотографиями
+    """
+    script_dir = get_script_dir()
+
+    albums_folders = {}  # словарь, содержащий значения названий папок альбомов
+                         # и их полных путей
+
+    # получить список всех элементов файловой системы в папке static/albums
+    elements = glob.glob('{}static/albums/*'.format(script_dir))
+
+    # пройти по элементам ФС и включить в словарь album_filder только папки
+    for element in elements:
+        if os.path.isdir(element):
+            # полный путь к альбому в файловой системе
+            full_path = element
+            # имя папки (последний элемент в пути)
+            base_name = os.path.basename(element)
+
+            # создать ключ и значение
+            albums_folders[base_name] = full_path
+
+    # пройти по словарю, создаьть объекты альбомов, подключить альбомы к сайту
+    for album_name in albums_folders:
+        album = Album(name=album_name,
+                      path=albums_folders[album_name],
+                      auto_load=True,
+                      sort_slides=True,
+                      )
+
+        logger.debug(f"Добавление к сайту альбома '{album_name}'" + \
+                     f", полный путь {albums_folders[album_name]}"
+                     )
+
+        site.add_album(album)

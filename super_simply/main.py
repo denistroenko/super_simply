@@ -31,6 +31,7 @@ def main():
     super_simply.load_system_pages(site)
     super_simply.load_pages(site)
     super_simply.load_carousels(site)
+    super_simply.load_albums(site)
     custom.load()
 
 
