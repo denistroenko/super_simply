@@ -17,7 +17,7 @@ config_site.read_file(config_file='%sconfig/site' % get_script_dir(),
                       comment='#',
                       )
 # Pages config
-config_pages= Config()
+config_pages = Config()
 config_pages.read_file(config_file='%sconfig/pages' % get_script_dir(),
                        comment='#',
                        )
@@ -26,7 +26,6 @@ config_carousels = Config()
 config_carousels.read_file(config_file='%sconfig/carousels' % get_script_dir(),
                            comment='#',
                            )
-
 
 class Site:
     """
@@ -329,7 +328,8 @@ class Page:
 
         self.subpages = []
 
-        logger.debug('Конец инициализации')
+        logger.debug('Конец инициализации. %s' % self.__dict__.items())
+
 
     def add_subpage(self, page: object) -> None:
         """
