@@ -10,8 +10,8 @@ from values import int_value, str_value, list_value, dict_value, bool_value
 # logger
 logger = logging.getLogger(__name__)
 configure_logger(logger,
-                 debug_file_name='./log/debug.log',
-                 error_file_name='./log/error.log',
+                 debug_file_name='{}log/debug.log'.format(get_script_dir()),
+                 error_file_name='{}log/error.log'.format(get_script_dir()),
                  )
 # Site config
 config_site = Config()

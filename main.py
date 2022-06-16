@@ -5,7 +5,7 @@ import logging
 import datetime
 from typing import Optional
 from flask import Flask, render_template
-from baseapplib import configure_logger
+from baseapplib import configure_logger, get_script_dir
 import super_simply
 import custom
 
@@ -23,9 +23,10 @@ site = super_simply.Site()
 
 def main():
     configure_logger(logger,
-                     debug_file_name='./log/debug.log',
-                     error_file_name='./log/error.log',
+                     debug_file_name='{}log/debug.log'.format(get_script_dir()),
+                     error_file_name='{}log/error.log'.format(get_script_dir()),
                      )
+
     logger.debug('# # # # #  Приложение запущено  # # # # #')
     super_simply.configure_site(site)
     super_simply.load_system_pages(site)

@@ -1,12 +1,11 @@
 import logging
-from baseapplib import configure_logger
+from baseapplib import configure_logger, get_script_dir
 
 
 logger = logging.getLogger(__name__)
-
 configure_logger(logger,
-                 debug_file_name='./log/value_debug.log',
-                 error_file_name='./log/value_error.log',
+                 debug_file_name='{}log/value_debug.log'.format(get_script_dir()),
+                 error_file_name='{}log/value_error.log'.format(get_script_dir()),
                  )
 
 
