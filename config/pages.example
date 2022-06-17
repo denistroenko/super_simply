@@ -1,0 +1,24 @@
+#[name]
+#path = 
+#template =
+#parent =
+#title = 
+#h1 =
+#description = 
+#keywords = 
+#visible = 
+#aliases =
+#image =
+#icon =
+
+
+
+[Главная]
+path = /
+template = welcome.html
+album_photos = 02
+
+#[Тест-родитель]
+
+#[Тест1]
+#parent = Тест-родитель
