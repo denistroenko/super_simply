@@ -12,13 +12,6 @@
 #icon =
 
 
-
 [Главная]
 path = /
-template = welcome.html
-album_photos = 02
-
-#[Тест-родитель]
-
-#[Тест1]
-#parent = Тест-родитель
+template = home.html
