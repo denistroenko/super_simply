@@ -20,4 +20,4 @@ def get_script_dir(follow_symlinks=True):
 sys.path.insert(0, get_script_dir())
 
 # Application
-from main import app as application
+from view import app as application
