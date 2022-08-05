@@ -530,7 +530,7 @@ def load_pages(site: object) -> None:
         aliases = []
         image = ''
         icon = ''
-        info = None
+        info = {}
 
         # проходим по параметрам секций (свойства страниц)
         for parameter in settings[name]:
@@ -577,7 +577,7 @@ def load_pages(site: object) -> None:
                 name = value
                 continue
             else:
-                info = (parameter, value)
+                info[parameter] = value
 
         new_page = Page(name=name,
                         path=path,
@@ -592,8 +592,8 @@ def load_pages(site: object) -> None:
                         image=image,
                         icon=icon,
                         )
-        if info is not None:
-            new_page.info[info[0]] = info[1]
+        if len(info)>0:
+            new_page.info = info
 
         site.add_page(page=new_page)
 
