@@ -200,7 +200,7 @@ class Site:
         # Вернуть страницу 404
         return self.get_system_page('404')
 
-    def generate_translit_path(rus_name: str) -> str:
+    def __generate_translit_path(rus_name: str) -> str:
         # Rules and liters
         english_liters = 'qwertyuiopasdfghjklzxcvbnm'
         translit_rules = {'а': 'a',
@@ -258,11 +258,13 @@ class Site:
         while '--' in eng_name:
             eng_name = eng_name.replace('--', '-')
 
-        if eng_name[0] == '-':
-            eng_name = eng_name[1:]
+        if len(eng_name) > 1:
+            if eng_name[0] == '-':
+                eng_name = eng_name[1:]
 
-        if eng_name[-1] == '-':
-            eng_name = eng_name[:-1]
+        if len(eng_name) > 1:
+            if eng_name[-1] == '-':
+                eng_name = eng_name[:-1]
 
         # double pages
         #double_pages_postfix = ''
@@ -514,8 +516,8 @@ def load_pages(site: object) -> None:
     settings = config_pages.settings  # dict
 
     # проходим по именам секций (имена страниц)
-    for name in settings:
-        logger.debug('Добавление страницы %s' % name)
+    for section_name in settings:
+        logger.debug('Добавление страницы %s' % section_name)
 
         # Умолчания
         path = '#'
@@ -531,10 +533,11 @@ def load_pages(site: object) -> None:
         image = ''
         icon = ''
         info = {}
+        name = site.__generate_translit_path(section_name)
 
         # проходим по параметрам секций (свойства страниц)
-        for parameter in settings[name]:
-            value = settings[name][parameter]
+        for parameter in settings[section_name]:
+            value = settings[section_name][parameter]
             if parameter == 'path':
                 if value != '':
                     path = value
