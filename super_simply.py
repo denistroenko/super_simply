@@ -200,7 +200,7 @@ class Site:
         # Вернуть страницу 404
         return self.get_system_page('404')
 
-    def __generate_translit_path(rus_name: str) -> str:
+    def generate_translit_path(rus_name: str) -> str:
         # Rules and liters
         english_liters = 'qwertyuiopasdfghjklzxcvbnm'
         translit_rules = {'а': 'a',
@@ -533,7 +533,7 @@ def load_pages(site: object) -> None:
         image = ''
         icon = ''
         info = {}
-        name = site.__generate_translit_path(section_name)
+        name = site.generate_translit_path(section_name)
 
         # проходим по параметрам секций (свойства страниц)
         for parameter in settings[section_name]:
