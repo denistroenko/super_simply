@@ -181,10 +181,12 @@ class Site:
         """
         self.server[key] = info
 
-    def get_page(self, id) -> object:
+    def get_page(self, id, return_404 :bool = True):
         """
         Возвращает объект страницы. id - идентификатор страницы, либо ее путь,
         либо алиас.
+        Если страница не найдена - возвращает страницу 404, либо None,
+        если return_404 == False
         """
 
         pages = self.get_pages()
@@ -198,11 +200,14 @@ class Site:
                 return page
 
         # Вернуть страницу 404
-        return self.get_system_page('404')
+        if return_404:
+            return self.get_system_page('404')
 
-    def generate_translit_path(self, rus_name: str) -> str:
+        return None
+
+    def generate_translit_path(self, path: str) -> str:
         # Rules and liters
-        english_liters = 'qwertyuiopasdfghjklzxcvbnm'
+        english_liters = '/-qwertyuiopasdfghjklzxcvbnm1234567890'
         translit_rules = {'а': 'a',
                           'б': 'b',
                           'в': 'v',
@@ -238,39 +243,54 @@ class Site:
                           'я': 'ya',
                           }
         # lower
-        rus_name = rus_name.lower()
+        path = path.lower()
 
         # init
-        eng_name = ''
+        new_path = ''
 
         # change symbols from rules
-        for letter in rus_name:
+        for letter in path:
             if letter in english_liters:
-                eng_name += letter
+                new_path += letter
                 continue
 
             if letter in translit_rules:
-                eng_name += translit_rules[letter]
+                new_path += translit_rules[letter]
             else:
-                eng_name += '-'
+                new_path += '-'
 
         # replace doubles and 0, -1 indexes
-        while '--' in eng_name:
-            eng_name = eng_name.replace('--', '-')
+        while '--' in new_path:
+            new_path = new_path.replace('--', '-')
 
-        if len(eng_name) > 1:
-            if eng_name[0] == '-':
-                eng_name = eng_name[1:]
+        if len(new_path) > 1:
+            if new_path[0] == '-':
+                new_path = new_path[1:]
 
-        if len(eng_name) > 1:
-            if eng_name[-1] == '-':
-                eng_name = eng_name[:-1]
+        if len(new_path) > 1:
+            if new_path[-1] == '-':
+                new_path = new_path[:-1]
 
         # double pages
-        #double_pages_postfix = ''
-        #while self.get_page()
+        double_pages_postfix = 1
+        try_path = new_path
+        while self.is_page(try_path):
+            double_pages_postfix += 1
+            try_path = '{}-{}'.format(new_path, double_pages_postfix)
+            print(try_path)
 
-        return eng_name
+        new_path = try_path
+        return new_path
+
+    def is_page(self, id):
+        """
+        Возващает True, если искомая страница есть на сайте. False, если нет
+        таковой. id - идентификатор страницы, ее путь либо алиас.
+        """
+        if self.get_page(id, return_404=False) == None:
+            return False
+
+        return True
 
 
 class Page:
@@ -520,8 +540,7 @@ def load_pages(site: object) -> None:
         logger.debug('Добавление страницы %s' % name)
 
         # Умолчания
-        print(name)
-        path = site.generate_translit_path(name)
+        path = site.generate_translit_path('/{}'.format(name))
         template = 'page.html'
         parent = -1
         title = '{} - {} {}'.format(name, site.name, site.domain)
@@ -549,7 +568,7 @@ def load_pages(site: object) -> None:
                 try:
                     parent = int(value)
                 except ValueError:
-                    logger.error(
+                    logger.erroer(
                             'В файле конфигурации страниц parent - не число!')
                 continue
             elif parameter == 'title':
