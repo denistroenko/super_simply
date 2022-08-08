@@ -200,7 +200,7 @@ class Site:
         # Вернуть страницу 404
         return self.get_system_page('404')
 
-    def generate_translit_path(rus_name: str) -> str:
+    def generate_translit_path(self, rus_name: str) -> str:
         # Rules and liters
         english_liters = 'qwertyuiopasdfghjklzxcvbnm'
         translit_rules = {'а': 'a',
@@ -516,11 +516,12 @@ def load_pages(site: object) -> None:
     settings = config_pages.settings  # dict
 
     # проходим по именам секций (имена страниц)
-    for section_name in settings:
-        logger.debug('Добавление страницы %s' % section_name)
+    for name in settings:
+        logger.debug('Добавление страницы %s' % name)
 
         # Умолчания
-        path = '#'
+        print(name)
+        path = site.generate_translit_path(name)
         template = 'page.html'
         parent = -1
         title = '{} - {} {}'.format(name, site.name, site.domain)
@@ -533,11 +534,10 @@ def load_pages(site: object) -> None:
         image = ''
         icon = ''
         info = {}
-        name = site.generate_translit_path(section_name)
 
         # проходим по параметрам секций (свойства страниц)
-        for parameter in settings[section_name]:
-            value = settings[section_name][parameter]
+        for parameter in settings[name]:
+            value = settings[name][parameter]
             if parameter == 'path':
                 if value != '':
                     path = value
