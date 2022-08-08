@@ -57,7 +57,7 @@
                 <span style="color: darkgray; font-weight: 600;">
                     [id: {{ page.id }}]
                 </span>
-                {% for alias in page.alias_list %}
+                {% for alias in page.aliases %}
                     <a href="{{ alias }}">
                         <span style="color: darkgray; font-weight: 300;">
                             {{ alias }}, 
@@ -70,16 +70,20 @@
                     </span>
                 </a>
                 <br>
+                <h3 style="margin: 0;">{{ page.h1  }}</h3>
                 <span style="color: black; font-weight: 300;">
                     {% if page.description != '' %}
-                        {{ page.description }}
+                        description: {{ page.description }}
                     {% else %}
                         <span style="color: red;">
                             Нет description
                         </span>
-                    {% endif %}
-                    
+                    {% endif %} 
                     <br>
+                    {% if page.keywords %}
+                    <i>keywords: {{ page.keywords }}</i>
+                    <br>
+                    {% endif %}
                 </span>
             {% endfor %}
         </div>

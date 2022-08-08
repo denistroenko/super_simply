@@ -68,6 +68,10 @@ class Site:
         self.info = {}          # любая прочая информация (словарь)
         self.carousels = []     # "карусели" - список объектов карусель
         self.albums = {}        # "альбомы" - словарь имен:объектов альбомов
+        self.title_rule = '{page.name} - {site.name}'  # SEO-правило title
+        self.h1_rule = '{page.name}'                   # SEO-правило h1
+        self.description_rule = ''                     # SEO-правило description
+        self.keywords_rule = ''                        # SEO-правило keywords
         logger.debug('Конец инициализации')
 
     def __fill_page_breadcrumbs(self, page: object) -> None:
@@ -524,6 +528,14 @@ def configure_site(site: object) -> None:
             site.email = settings[key]
         elif key == 'address':
             site.address = settings[key]
+        elif key == 'title_rule':
+            site.title_rule = settings[key]
+        elif key == 'h1_rule':
+            site.h1_rule = settings[key]
+        elif key == 'description_rule':
+            site.description_rule = settings[key]
+        elif key == 'keywords_rule':
+            site.keywords_rule = settings[key]
         else:
             site.info[key] = settings[key]
 
@@ -543,11 +555,12 @@ def load_pages(site: object) -> None:
         path = site.generate_translit_path('/{}'.format(name))
         template = 'page.html'
         parent = -1
-        title = '{} - {} {}'.format(name, site.name, site.domain)
-        h1 = name
-        description = '{} {} {} {}'.format(
-                site.name, h1, site.address, site.phone)
+
+        title = ''
+        h1 = ''
+        description = ''
         keywords = ''
+
         visible = True
         aliases = []
         image = ''
@@ -587,7 +600,7 @@ def load_pages(site: object) -> None:
                 visible = value
                 continue
             elif parameter == 'aliases':
-                aliases = value
+                aliases = value.replace(' ','').split(',')
                 continue
             elif parameter == 'image':
                 image = value
@@ -616,6 +629,17 @@ def load_pages(site: object) -> None:
                         )
         if len(info)>0:
             new_page.info = info
+
+        # Если title, h1, description и keywords так и не были установлены,
+        # заполнить их исходя из правил сайта
+        if new_page.title == '':
+            new_page.title = site.title_rule.format(page=new_page, site=site)
+        if new_page.h1 == '':
+            new_page.h1 = site.h1_rule.format(page=new_page, site=site)
+        if new_page.description == '':
+            new_page.description = site.description_rule.format(page=new_page, site=site)
+        if new_page.keywords == '':
+            new_page.keywords = site.keywords_rule.format(page=new_page, site=site)
 
         site.add_page(page=new_page)
 
