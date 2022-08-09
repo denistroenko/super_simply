@@ -633,14 +633,25 @@ def load_pages(site: object) -> None:
         # Если title, h1, description и keywords так и не были установлены,
         # заполнить их исходя из правил сайта
         if new_page.title == '':
-            new_page.title = site.title_rule.format(page=new_page, site=site)
+            try:
+                new_page.title = site.title_rule.format(page=new_page, site=site)
+            except:
+                logger.debug('Ошибка при заполнении из правила title_rule!')
         if new_page.h1 == '':
-            new_page.h1 = site.h1_rule.format(page=new_page, site=site)
+            try:
+                new_page.h1 = site.h1_rule.format(page=new_page, site=site)
+            except:
+                logger.debug('Ошибка при заполнении из правила h1_rule!')
         if new_page.description == '':
-            new_page.description = site.description_rule.format(page=new_page, site=site)
+            try:
+                new_page.description = site.description_rule.format(page=new_page, site=site)
+            except:
+                logger.debug('Ошибка при заполнении из правила description_rule!')
         if new_page.keywords == '':
-            new_page.keywords = site.keywords_rule.format(page=new_page, site=site)
-
+            try:
+                new_page.keywords = site.keywords_rule.format(page=new_page, site=site)
+            except:
+                logger.debug('Ошибка при заполнении из правила keywords_rule!')
         site.add_page(page=new_page)
 
 
