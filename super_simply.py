@@ -126,6 +126,33 @@ class Site:
         page.id = self.total_pages  # присвоить id
         self.total_pages += 1  # прибавить 1 к счетчику страниц на сайте
 
+        # Если path страницы не заполнен, заполнить исходя из ее названия
+        if page.path == '':
+            page.path = self.__generate_page_path(page.name)
+
+        # Если title, h1, description и keywords не установлены,
+        # заполнить их исходя из правил сайта
+        if page.title == '':
+            try:
+                page.title = self.title_rule.format(page=page, site=self)
+            except:
+                logger.debug('Ошибка при заполнении из правила title_rule!')
+        if page.h1 == '':
+            try:
+                page.h1 = self.h1_rule.format(page=page, site=self)
+            except:
+                logger.debug('Ошибка при заполнении из правила h1_rule!')
+        if page.description == '':
+            try:
+                page.description = self.description_rule.format(page=page, site=self)
+            except:
+                logger.debug('Ошибка при заполнении из правила description_rule!')
+        if page.keywords == '':
+            try:
+                page.keywords = self.keywords_rule.format(page=page, site=self)
+            except:
+                logger.debug('Ошибка при заполнении из правила keywords_rule!')
+
         if page.parent == -1:
             self.pages.append(page)
             logger.debug('Страница добавлена как страница сайта.')
@@ -209,9 +236,9 @@ class Site:
 
         return None
 
-    def generate_translit_path(self, path: str) -> str:
+    def __generate_page_path(self, path: str) -> str:
         # Rules and liters
-        english_liters = '/-qwertyuiopasdfghjklzxcvbnm1234567890'
+        english_liters = '-qwertyuiopasdfghjklzxcvbnm1234567890'
         translit_rules = {'а': 'a',
                           'б': 'b',
                           'в': 'v',
@@ -284,7 +311,7 @@ class Site:
             print(try_path)
 
         new_path = try_path
-        return new_path
+        return '/%s' % new_path
 
     def is_page(self, id):
         """
@@ -552,7 +579,7 @@ def load_pages(site: object) -> None:
         logger.debug('Добавление страницы %s' % name)
 
         # Умолчания
-        path = site.generate_translit_path('/{}'.format(name))
+        path = ''
         template = 'page.html'
         parent = -1
 
@@ -630,28 +657,6 @@ def load_pages(site: object) -> None:
         if len(info)>0:
             new_page.info = info
 
-        # Если title, h1, description и keywords так и не были установлены,
-        # заполнить их исходя из правил сайта
-        if new_page.title == '':
-            try:
-                new_page.title = site.title_rule.format(page=new_page, site=site)
-            except:
-                logger.debug('Ошибка при заполнении из правила title_rule!')
-        if new_page.h1 == '':
-            try:
-                new_page.h1 = site.h1_rule.format(page=new_page, site=site)
-            except:
-                logger.debug('Ошибка при заполнении из правила h1_rule!')
-        if new_page.description == '':
-            try:
-                new_page.description = site.description_rule.format(page=new_page, site=site)
-            except:
-                logger.debug('Ошибка при заполнении из правила description_rule!')
-        if new_page.keywords == '':
-            try:
-                new_page.keywords = site.keywords_rule.format(page=new_page, site=site)
-            except:
-                logger.debug('Ошибка при заполнении из правила keywords_rule!')
         site.add_page(page=new_page)
 
 
