@@ -172,8 +172,15 @@ class Site:
         """
         Добавляет имя (строку) и альбом (объект) в словарь альбомов сайта
         """
+        logger.debug('Site.add_album() Добавление альбома на сайт...')
         # присвоить ключ:значение, т.е. имя альбома:объект альбома
-        self.albums[album.name] = album
+        if isinstance(album, Album):
+            self.albums[album.name] = album
+            logger.debug('Альбом добавлен.')
+
+        else:
+            logger.debug('Альбом не добавлен, поскольку не является ' \
+                         + 'экземпляром класса Album')
 
     def get_pages(self) -> list:
         """
