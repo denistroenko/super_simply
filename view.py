@@ -5,9 +5,10 @@ import logging
 import datetime
 from typing import Optional
 from flask import Flask, render_template
-from baseapplib import configure_logger, get_script_dir
+from baseapplib import configure_logger, get_script_dir, PasswordGenerator
 import super_simply
 import custom
+from web_forms import CallBackForm
 
 
 # GLOBAL
@@ -20,6 +21,7 @@ configure_logger(logger,
                  )
 # App
 app = Flask(__name__)
+app.config['SECRET_KEY'] = PasswordGenerator().get_new_password()
 # Site
 site = super_simply.Site()
 
@@ -48,6 +50,8 @@ def show_page(page_url):
     logger.debug('Запрошена страница %s' % page_url)
 
     page = site.get_page(page_url)
+    forms = {'callback': CallBackForm()}
+    page.forms = forms
 
     for key in site.system_pages:
         if site.system_pages[key].path == page_url:

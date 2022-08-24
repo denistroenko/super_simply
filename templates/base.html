@@ -50,6 +50,13 @@
                 {% include 'footer.html' %}
             </div>
         </div>
+        
+        <form method="POST">
+        {{ page.forms['callback'].name.label }}
+        {{ page.forms['callback'].name(class_='form_name') }}
+        {{ page.forms['callback'].submit(class_='form_submit') }}
+        </form>
+
     </body>
 
     <script src="/static/system.js"></script>

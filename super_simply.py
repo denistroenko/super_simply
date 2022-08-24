@@ -1,6 +1,7 @@
 import logging
 import glob
 import os.path
+
 from baseapplib import get_script_dir, configure_logger
 from config import Config
 from values import int_value, str_value, list_value, dict_value, bool_value
@@ -50,6 +51,10 @@ class Site:
     info = dict_value('info')
     carousels = list_value('carousels')
     albums = dict_value('albums')
+    title_rule = str_value('title_rule')
+    h1_rule = str_value('h1_rule')
+    description_rule = str_value('description_rule')
+    keywords_rule = str_value('keywords_rule')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -66,12 +71,15 @@ class Site:
         self.email = ''         # адрес электронной почты
         self.address = ''       # адрес офиса
         self.info = {}          # любая прочая информация (словарь)
+
         self.carousels = []     # "карусели" - список объектов карусель
         self.albums = {}        # "альбомы" - словарь имен:объектов альбомов
+
         self.title_rule = '{page.name} - {site.name}'  # SEO-правило title
         self.h1_rule = '{page.name}'                   # SEO-правило h1
         self.description_rule = ''                     # SEO-правило description
         self.keywords_rule = ''                        # SEO-правило keywords
+
         logger.debug('Конец инициализации')
 
     def __fill_page_breadcrumbs(self, page: object) -> None:
@@ -353,6 +361,7 @@ class Page:
     image = str_value('image')
     icon = str_value('icon')
     info = dict_value('info')
+    forms = dict_value('forms')
 
     def __init__(self,
                  name: str,             # имя страницы для ссылок
@@ -369,6 +378,7 @@ class Page:
                  image: str = '',       # относительный путь к картинке
                  icon: str = '',        # относитеьный путь к иконке
                  info: dict = {},       # любая прочая информация (словарь)
+                 forms: dict = {},      # "формы" - словарь имен:объектов веб-форм
                  ):
         logger.debug('Инициализация <Page>')
 
