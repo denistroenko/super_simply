@@ -50,7 +50,9 @@ def show_page(page_url):
     logger.debug('Запрошена страница %s' % page_url)
 
     page = site.get_page(page_url)
-    forms = {'callback': CallBackForm()}
+
+    forms = {'callback': CallBackForm(),
+             }
     page.forms = forms
 
     for key in site.system_pages:
