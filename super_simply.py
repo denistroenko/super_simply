@@ -55,6 +55,8 @@ class Site:
     h1_rule = str_value('h1_rule')
     description_rule = str_value('description_rule')
     keywords_rule = str_value('keywords_rule')
+    forms = dict_value('forms')
+    session = dict_value('session')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -79,6 +81,9 @@ class Site:
         self.h1_rule = '{page.name}'                   # SEO-правило h1
         self.description_rule = ''                     # SEO-правило description
         self.keywords_rule = ''                        # SEO-правило keywords
+
+        self.forms: dict = {}   # "формы" - словарь имен:объектов веб-форм
+        self.session = {}       # для копии данных из веб-форм
 
         logger.debug('Конец инициализации')
 
@@ -247,7 +252,7 @@ class Site:
 
         # Вернуть страницу 404
         if return_404:
-            return self.get_system_page('404')
+            return self.get_system_page('_404')
 
         return None
 
@@ -361,7 +366,6 @@ class Page:
     image = str_value('image')
     icon = str_value('icon')
     info = dict_value('info')
-    forms = dict_value('forms')
 
     def __init__(self,
                  name: str,             # имя страницы для ссылок
@@ -378,7 +382,6 @@ class Page:
                  image: str = '',       # относительный путь к картинке
                  icon: str = '',        # относитеьный путь к иконке
                  info: dict = {},       # любая прочая информация (словарь)
-                 forms: dict = {},      # "формы" - словарь имен:объектов веб-форм
                  ):
         logger.debug('Инициализация <Page>')
 
@@ -681,19 +684,25 @@ def load_system_pages(site: object) -> None:
     """
     Создает системные страницы сайта (передать объект сайта)
     """
-    logger.debug('Добавление страницы 404')
 
     new_page = Page(name='error 404',
-                    path='/404',
-                    template='404.html',
+                    path='/_404',
+                    template='_404.html',
                     )
-    site.add_system_page(page=new_page, key='404')
+    site.add_system_page(page=new_page, key='_404')
 
     new_page = Page(name='seo test',
                     path='/_seo',
-                    template='seo.html',
+                    template='_seo.html',
                     )
     site.add_system_page(page=new_page, key='_seo')
+
+
+    new_page = Page(name='form completed',
+                    path='/_form_completed',
+                    template='_form_completed.html',
+                    )
+    site.add_system_page(page=new_page, key='_form_completed')
 
 
 def load_carousels(site: object) -> None:

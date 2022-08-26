@@ -5,6 +5,8 @@ This import custom plugins
 
 import sys
 sys.path.append('./custom/')
+sys.path.append('..')
+sys.path.append('.')
 import glob
 import logging
 from baseapplib import configure_logger, get_script_dir
@@ -29,4 +31,4 @@ def load():
                         'import ' + plugin[:-3] + '\n')
                     logger.debug('Будет импортирован ' + plugin)
     logger.debug('Импорт custom-модулей...')
-    from . import imports
+    import imports

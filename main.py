@@ -4,12 +4,11 @@ __version__ = '0.0.1'
 import logging
 import datetime
 from typing import Optional
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request
 from baseapplib import configure_logger, get_script_dir, PasswordGenerator
 import super_simply
 import custom
-from web_forms import CallBackForm
-
+from custom import web_forms, view
 
 # GLOBAL
 FLASK_RUN_EXTRA_FILES = ['./config/site', './config/pages']
@@ -38,22 +37,27 @@ def main():
 def run_local_app(host: Optional[str]=None, debug: Optional[bool]=None):
     app.run(host=host, debug=debug, extra_files = FLASK_RUN_EXTRA_FILES)
 
+view.mapping_view(app)
 
-@app.route('/')
-def show_root():
-    return show_page('')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/<path:page_url>', methods=['GET', 'POST'])
+def show_page(page_url=''):
 
+    if len(page_url) > 1 and page_url[-1] == '/':
+        print(page_url)
+        page_url = page_url[:-1]
 
-@app.route('/<path:page_url>/')
-def show_page(page_url):
+    forms, session = web_forms.get_forms()
+    site.forms = forms
+
     page_url = '/%s' % page_url
     logger.debug('Запрошена страница %s' % page_url)
 
     page = site.get_page(page_url)
 
-    forms = {'callback': CallBackForm(),
-             }
-    page.forms = forms
+    if request.method == 'POST':
+        site.session = session
+        return redirect('/_form_completed')
 
     for key in site.system_pages:
         if site.system_pages[key].path == page_url:
@@ -62,10 +66,7 @@ def show_page(page_url):
 
     site.add_server_info(key='year', info=int(datetime.date.today().year))
 
-    return render_template(page.template,
-                           site=site,
-                           page=page,
-                           )
+    return render_template(page.template, site=site, page=page)
 
 
 main()

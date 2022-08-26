@@ -52,9 +52,13 @@
         </div>
         
         <form method="POST">
-        {{ page.forms['callback'].name.label }}
-        {{ page.forms['callback'].name(class_='form_name') }}
-        {{ page.forms['callback'].submit(class_='form_submit') }}
+        Ваше имя: 
+        {{ site.forms['feedback'].name(class_='form_name') }}
+
+        {{ site.forms['feedback'].message.label }}
+        {{ site.forms['feedback'].message(class_='form_name') }}
+
+        {{ site.forms['feedback'].submit(class_='form_submit') }}
         </form>
 
     </body>

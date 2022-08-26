@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+    Форма заполнена - {{ site.name  }}
+{% endblock %}
+
+{% block breadcrumbs %} 
+{% endblock %}
+
+{% block content %}
+<div style="margin-top: 200px; margin-bottom: 100px; ">
+    <h2 style="text-align: center;">Ваша заявка принята!</h2>
+    <p style="text-align: center;">
+        {{ site.session.name  }}, спасибо, Ваша заявка принята.</br>
+        Мы перезвоним Вам по номеру телефона {{ site.session.phone  }} в ближайшее рабочее время!</p>
+</div>
+{% endblock %}
