@@ -11,18 +11,20 @@
     </head>
 
     <body>
+        {% block content %}
         <form method="POST">
         Ваше имя: 
-        {{ site.forms['feedback'].name(class_='form_name') }}
+        {{ forms['feedback'].name(class_='form_name') }}
 
-        {{ site.forms['feedback'].phone.label }}
-        {{ site.forms['feedback'].phone(class_='form_name') }}
+        {{ forms['feedback'].phone.label }}
+        {{ forms['feedback'].phone(class_='form_name') }}
 
-        {{ site.forms['feedback'].message.label }}
-        {{ site.forms['feedback'].message(class_='form_name') }}
+        {{ forms['feedback'].message.label }}
+        {{ forms['feedback'].message(class_='form_name') }}
 
-        {{ site.forms['feedback'].submit(class_='form_submit') }}
+        {{ forms['feedback'].submit(class_='form_submit') }}
         </form>
+        {% endblock %}
     </body>
 
     <script src="/static/main.js"></script>

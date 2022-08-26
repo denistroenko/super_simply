@@ -26,6 +26,7 @@ def main():
                      start_msg='\n\n#  Приложение запущено  #')
 
     load_app_config()
+    mapping_view()
 
     super_simply.configure_site(site)
     super_simply.load_system_pages(site)
@@ -47,52 +48,51 @@ def load_app_config():
         secret_key = PasswordGenerator().get_new_password()
         app_config.set('app', 'secret_key', secret_key)
         app_config.write_file(f'{get_script_dir()}config/app')
+    app.config['SECRET_KEY'] = secret_key
 
 
 def run_local_app(host: Optional[str]=None, debug: Optional[bool]=None):
     FLASK_RUN_EXTRA_FILES = ['./config/site', './config/pages']
+    main()
     app.run(host=host, debug=debug, extra_files = FLASK_RUN_EXTRA_FILES)
 
 
-# custom views in ./custom/views
-view.mapping_view(app, site)
+def mapping_view():
+    # custom views in ./custom/views
+    view.mapping_view(app, site)
 
+    # standard views for all pages
+    @app.route('/')
+    @app.route('/<path:page_url>')
+    def show_page(page_url=''):
+        # убрать / в конце относительного url
+        if len(page_url) > 1 and page_url[-1] == '/':
+            page_url = page_url[:-1]
 
-# standard views for all pages
-@app.route('/')
-@app.route('/<path:page_url>')
-def show_page(page_url=''):
-    # убрать / в конце относительного url
-    if len(page_url) > 1 and page_url[-1] == '/':
-        page_url = page_url[:-1]
+        # поставить / в начало относительного url
+        page_url = '/%s' % page_url
 
-    # поставить / в начало относительного url
-    page_url = '/%s' % page_url
+        logger.debug('Запрошена страница %s' % page_url)
 
-    logger.debug('Запрошена страница %s' % page_url)
+        # получить формы (контекст запроса)
+        forms = web_forms.get_forms()
 
-    # получить формы (контекст запроса)
-    forms = web_forms.get_forms()
+        # получить страницу сайта
+        page = site.get_page(page_url)
 
-    # получить страницу сайта
-    page = site.get_page(page_url)
+        # получить системную страницу
+        for key in site.system_pages:
+            if site.system_pages[key].path == page_url:
+                logger.debug('Возвращается специальная страница сайта.')
+                page = site.system_pages[key]
 
-    # получить системную страницу
-    for key in site.system_pages:
-        if site.system_pages[key].path == page_url:
-            logger.debug('Возвращается специальная страница сайта.')
-            page = site.system_pages[key]
+        # Добавить шташрмацию сервера
+        site.add_server_info(key='year', info=int(datetime.date.today().year))
 
-    # Добавить шташрмацию сервера
-    site.add_server_info(key='year', info=int(datetime.date.today().year))
-
-    # вернуть html-рендер нужной страницы
-    return render_template(page.template, site=site, page=page,
-            session=session, forms=forms)
+        # вернуть html-рендер нужной страницы
+        return render_template(page.template, site=site, page=page,
+                session=session, forms=forms)
 
 
 if __name__ == '__main__':
     run_local_app(host='192.168.88.1', debug=True, )
-else:
-    # run main
-    main()
