@@ -6,7 +6,7 @@ import os
 def get_script_dir(follow_symlinks=True):
     """
         Возвращает путь к скрипту __main__ (папку)
-    """
+        """
     if getattr(sys, 'frozen', False): # py2exe, PyInstaller, cx_Freeze
         path = os.path.abspath(sys.executable)
     else:
@@ -16,8 +16,13 @@ def get_script_dir(follow_symlinks=True):
     return '{}/'.format(os.path.dirname(path))
 
 
-# Change dir to curent app dir
+# adding dirs to curent app dir
 sys.path.insert(0, get_script_dir())
+sys.path.insert(0, '%scustom' % get_script_dir())
+
 
 # Application
-from main import app as application
+from main import app as application, main
+
+
+main()
