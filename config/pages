@@ -7,11 +7,11 @@
 #description = 
 #keywords = 
 #visible = 
-#aliases =
+#aliases = /home, /main
 #image =
 #icon =
-
 
 [Главная]
 path = /
 template = home.html
+aliases=/home, /main

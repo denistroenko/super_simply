@@ -83,17 +83,14 @@ class Config:
                     lines[index] = lines[index].replace('\n', '')
                     lines[index] = lines[index].replace('\t', ' ')
 
-                # удаляем строки, начинающиеся с комментария, если это
-                # не пустые строки
-                for line in lines:
-                    if len(line) > 0:
-                        if line[0] == comment:
-                            lines.remove(line)
-
-                # удаляем правую часть строки после комментария
+                # удалить комментарии по правую часть строки
+                # удалить строки, начинающиеся с комментария
                 for index in range(len(lines)):
                     if comment in lines[index]:
-                        lines[index] = lines[index].split(comment)[0]
+                        lines[index] = lines[index].split(comment)[0].strip()
+
+                for index in range(len(lines)):
+                    lines[index] = lines[index].strip()
 
                 # удаляем пустые строки из списка
                 while "" in lines:

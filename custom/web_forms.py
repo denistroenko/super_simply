@@ -1,5 +1,5 @@
 """
-Модуль описывает стандартные предустановленные формы
+custom forms module
 """
 
 
@@ -19,22 +19,13 @@ class FeedBackForm(Form):
     submit = SubmitField('Отправить')
     message = StringField('Сообщение')
 
-def get_forms() -> tuple:
+
+def get_forms() -> dict:
     """
-    Возвращает кортеж из 2-х элементов:
-    1 - словарь forms {имя:форма}
-    2 - словарь session {имя:данные}
+    return dict custom forms
     """
     feedback_form = FeedBackForm()
 
     forms = {'feedback': feedback_form,}
 
-    session = {}
-    session['name'] = feedback_form.name.data
-    session['second_name'] = feedback_form.second_name.data
-    session['last_name'] = feedback_form.last_name.data
-    session['phone'] = feedback_form.phone.data
-    session['email'] = feedback_form.email.data
-    session['message'] = feedback_form.message.data
-
-    return forms, session
+    return forms

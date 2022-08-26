@@ -12,27 +12,23 @@ from values import int_value, str_value, list_value, dict_value, bool_value
 logger = logging.getLogger(__name__)
 configure_logger(logger,
                  debug_file_name='{}log/debug.log'.format(get_script_dir()),
-                 error_file_name='{}log/error.log'.format(get_script_dir()),
-                 )
+                 error_file_name='{}log/error.log'.format(get_script_dir()))
 # Site config
 config_site = Config()
 config_site.read_file(config_file='%sconfig/site' % get_script_dir(),
-                      comment='#',
-                      )
+                      comment='#')
 # Pages config
 config_pages = Config()
 config_pages.read_file(config_file='%sconfig/pages' % get_script_dir(),
-                       comment='#',
-                       )
+                       comment='#')
 # Carousels config
 config_carousels = Config()
 config_carousels.read_file(config_file='%sconfig/carousels' % get_script_dir(),
-                           comment='#',
-                           )
+                           comment='#')
 
 class Site:
     """
-    Класс объекта сайта.
+    Класс сайта
     """
 
     # Свойства класса (через дескрипторы)
@@ -55,8 +51,6 @@ class Site:
     h1_rule = str_value('h1_rule')
     description_rule = str_value('description_rule')
     keywords_rule = str_value('keywords_rule')
-    forms = dict_value('forms')
-    session = dict_value('session')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -81,9 +75,6 @@ class Site:
         self.h1_rule = '{page.name}'                   # SEO-правило h1
         self.description_rule = ''                     # SEO-правило description
         self.keywords_rule = ''                        # SEO-правило keywords
-
-        self.forms: dict = {}   # "формы" - словарь имен:объектов веб-форм
-        self.session = {}       # для копии данных из веб-форм
 
         logger.debug('Конец инициализации')
 
@@ -346,7 +337,7 @@ class Site:
 
 class Page:
     """
-    Класс страницы сайта.
+    Класс страницы сайта
     """
 
     # Свойства класса (чарез дескрипторы)
