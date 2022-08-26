@@ -45,7 +45,10 @@ def load_app_config():
     except:
         # если исключение - создать ключ, добавить его в app_config,
         # перезаписать настройки приложения в файл
-        secret_key = PasswordGenerator().get_new_password()
+        password_generator = PasswordGenerator()
+        password_generator.password_len = 24
+        secret_key = password_generator.get_new_password()
+
         app_config.set('app', 'secret_key', secret_key)
         app_config.write_file(f'{get_script_dir()}config/app')
     app.config['SECRET_KEY'] = secret_key
