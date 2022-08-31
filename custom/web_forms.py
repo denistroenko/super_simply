@@ -5,7 +5,7 @@ custom forms module
 
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email
 
 
 # Форма обратной связи
@@ -15,7 +15,7 @@ class FeedBackForm(Form):
     second_name = StringField('Отчество')
     last_name = StringField('Фамилия')
     phone = StringField('Телефон', validators=[DataRequired()])
-    email = StringField('email', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Email()])
     submit = SubmitField('Отправить')
     message = StringField('Сообщение')
 
