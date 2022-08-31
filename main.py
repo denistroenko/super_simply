@@ -52,6 +52,7 @@ def load_app_config():
         app_config.set('app', 'secret_key', secret_key)
         app_config.write_file(f'{get_script_dir()}config/app')
     app.config['SECRET_KEY'] = secret_key
+    app.config['SRF_ENABLED'] = True
 
 
 def run_local_app(host: Optional[str]=None, debug: Optional[bool]=None):
