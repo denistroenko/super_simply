@@ -21,10 +21,7 @@ config_site.read_file(config_file='%sconfig/site' % get_script_dir(),
 config_pages = Config()
 config_pages.read_file(config_file='%sconfig/pages' % get_script_dir(),
                        comment='#')
-# Carousels config
-config_carousels = Config()
-config_carousels.read_file(config_file='%sconfig/carousels' % get_script_dir(),
-                           comment='#')
+
 
 class Site:
     """
@@ -45,7 +42,6 @@ class Site:
     email = str_value('email')
     address = str_value('address')
     info = dict_value('info')
-    carousels = list_value('carousels')
     albums = dict_value('albums')
     title_rule = str_value('title_rule')
     h1_rule = str_value('h1_rule')
@@ -68,7 +64,6 @@ class Site:
         self.address = ''       # адрес офиса
         self.info = {}          # любая прочая информация (словарь)
 
-        self.carousels = []     # "карусели" - список объектов карусель
         self.albums = {}        # "альбомы" - словарь имен:объектов альбомов
 
         self.title_rule = '{page.name} - {site.name}'  # SEO-правило title
@@ -165,12 +160,6 @@ class Site:
             parent = self.get_page(page.parent)
             parent.add_subpage(page)
             logger.debug('Страница добавлена как подстраница.')
-
-    def add_carousel(self, carousel: object) -> None:
-        """
-        Добавляет карусель к коллекции каруселей сайта
-        """
-        self.carousels.append(carousel)
 
     def add_album(self, album: object) -> None:
         """
@@ -429,53 +418,6 @@ class Slide:
         path = path[len(script_dir)-1:]
         self.src = path
 
-
-class Carousel_slide(Slide):
-    """
-    Слайд карусели
-    """
-    link = str_value('link')
-    title = str_value('title')
-    description = str_value('description')
-    info = dict_value('carousel_slide_info')
-
-    def __init__(self,
-                 name: str,             # имя слайда
-                 image: str,            # путь к изображению
-                 link: str = '#',       # ссылка (url Для клика)
-                 title: str = '',       # заголовок слайда
-                 description: str = '', # описание слайда
-                 info = {},             # прочая информация (словарь)
-                 ):
-        # __init__ базового класса
-        Slide.__init__(self, name=name, path=image)
-
-        self.link = link
-        self.title = title
-        self.description = description
-        self.info = info
-
-
-class Carousel:
-    """
-    Класс карусели
-    """
-    slides = list_value('slides')
-    name = str_value('name')
-
-    def __init__(self,
-                 name: str,
-                 ):
-        self.slides = []  # слайды карусели
-        self.name = name  # имя карусели
-
-    def add_slide(self, slide: object) -> None:
-        """
-        Добавляет слайд к слайдам карусели
-        """
-        self.slides.append(slide)
-
-
 class Album:
     """
     Класс альбома
@@ -528,10 +470,6 @@ class Album:
         Метод возвращает полный путь к альбому в рамках ФС
         """
         return(self.__path)
-
-
-class Promo_card:
-    pass
 
 
 def configure_site(site: object) -> None:
@@ -694,72 +632,6 @@ def load_system_pages(site: object) -> None:
                     template='_form_completed.html',
                     )
     site.add_system_page(page=new_page, key='_form_completed')
-
-
-def load_carousels(site: object) -> None:
-    """
-    Загружает конфигурацию каруселей сайта (передать объект сайта)
-    """
-    settings = config_carousels.settings
-    # Проходим по именам секций (имена каруселей)
-    for carousel_name in settings:
-        carousel = Carousel(carousel_name)
-
-        # Проходим по параметрам секций (имена слайдов)
-        # и загружаем слайды в карусель
-        for slide_name in settings[carousel_name]:
-            value = settings[carousel_name][slide_name]
-
-            # умолчания
-            image = ''
-            link = "#"
-            title = ''
-            description = ''
-            info = {}
-
-            # Атрибуты слайда получаем через split значения параметра
-            # по аргументу |
-            slide_attributes = value.split('|')
-
-            # Проходим по атрибутам слайда
-            # init count
-            i = 0
-            for attribute in slide_attributes:
-                if i == 0:
-                    image = '/static/img/%s' % attribute
-                elif i == 1:
-                    if attribute:
-                        link = attribute
-                elif i == 2:
-                    title = attribute
-                elif i == 3:
-                    description = attribute
-                else:
-                    # разделить attribute по знаку =
-                    attribute = attribute.split('=')
-                    # отдельно сохраняем разделенные части
-                    info_name = attribute[0]
-                    info_value = attribute[1]
-                    # добавляем в локальный словарь info эти значения как key,
-                    # value
-                    info[info_name] = info_value
-                i += 1
-
-            slide = Carousel_slide(name=slide_name,
-                                   image=image,
-                                   link=link,
-                                   title=title,
-                                   description=description,
-                                   )
-            # заполнить словарь slide.info, если есть, чем
-            if info != {}:
-                slide.info = info
-
-            # Добавить слайд к карусели
-            carousel.add_slide(slide=slide)
-
-        # добавить карусель к сайту
-        site.add_carousel(carousel)
 
 
 def load_albums(site: object) -> None:
