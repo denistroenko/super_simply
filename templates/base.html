@@ -12,6 +12,15 @@
 
     <body>
         {% block content %}
+        {{ site.albums['01'].slides[0].src }}
+        <img src="{{ site.albums['01'].slides[0].src }}">
+        <br><br>
+        {% for size in site.albums['01'].slides[0].thumbnails %}
+                {{ size }} = {{ site.albums['01'].slides[0].thumbnails[size].src }}
+                <img src="{{ site.albums['01'].slides[0].thumbnails[size].src }}">
+                <br>
+        {% endfor %}
+        <br><br>
         <form method="POST">
         Ваше имя: 
         {{ forms['feedback'].name(class_='form_name') }}

@@ -47,6 +47,7 @@ class Site:
     h1_rule = str_value('h1_rule')
     description_rule = str_value('description_rule')
     keywords_rule = str_value('keywords_rule')
+    thumbnail_sizes = dict_value('thumbnail_sizes')
 
     def __init__(self):
         logger.debug('Инициализация <Site>')
@@ -65,6 +66,8 @@ class Site:
         self.info = {}          # любая прочая информация (словарь)
 
         self.albums = {}        # "альбомы" - словарь имен:объектов альбомов
+        self.thumbnail_sizes = {}  # размеры эскизов для альбомов:
+                                   # имя:строка в формате 'width,height'
 
         self.title_rule = '{page.name} - {site.name}'  # SEO-правило title
         self.h1_rule = '{page.name}'                   # SEO-правило h1
@@ -397,26 +400,68 @@ class Page:
         raise ValueError('Неверный формат данных (верный - object).')
 
 
+class Thumbnail:
+    name = str_value('name')
+    src = str_value('src')
+
+    def __init__(self,
+                 path: str,         # Полный путь к эскизу
+                 width: int=0,      # ширина эскиза в пикселях
+                 height: int=0,     # высота эскиза в пикселях
+                 ):
+        self.path = path
+
+    @property
+    def src(self):
+        return self.path
+
+
 class Slide:
     """
     Базовый класс слайда
     """
     name = str_value('name')
     src = str_value('src')
+    thumbnails = dict_value('thumbnails')
+    thumbnail_sizes = dict_value('thumbnail_sizes')
 
     def __init__(self,
-                 name: str, # название слайда
+                 name: str,  # название слайда
                  path: str,  # полный путь к изображению
+                 thumbnail_sizes: dict={}, # словарь размеров эскиза
+                                           # 'имя':(width: int, height: int)
                  ):
 
-        # имя слайда без расширения
+
+        # имя слайда - без расширения
         self.name = str(name.split('.')[0])
 
-        script_dir = get_script_dir()
-
         # путь к файлу - от текущей директории скрипта
+        script_dir = get_script_dir()
         path = path[len(script_dir)-1:]
         self.src = path
+        self.thumbnail_sizes = thumbnail_sizes
+
+        self.thumbnails = {}
+
+        self.load_thumbnails()
+
+    def load_thumbnails(self):
+        # заполнить свойство thimbnails обхектами эскизов
+
+        for size_name in self.thumbnail_sizes:
+            width = self.thumbnail_sizes[size_name][0]
+            height = self.thumbnail_sizes[size_name][1]
+            # имя создать по правилу widh x height имя_слайда
+            file_name = os.path.basename(self.src)
+            dir_name = os.path.dirname(self.src)
+            path = f'{dir_name}/_thumbnails/{width}x{height}_{file_name}'
+
+            self.thumbnails[size_name] = Thumbnail(path=path,
+                                                   width=width,
+                                                   height=height,
+                                                   )
+
 
 class Album:
     """
@@ -425,6 +470,7 @@ class Album:
     name = str_value('name')
     __path = str_value('folder')
     slides = list_value('slides')
+    thumbnail_sizes = dict_value('thumbnail_sizes')
 
     def add_slide(self, slide: object) -> None:
         """
@@ -447,8 +493,10 @@ class Album:
             files = sorted(files)
 
         for file_path in files:
-            slide=Slide(os.path.basename(file_path),
-                        file_path)
+            slide=Slide(name=os.path.basename(file_path),
+                        path=file_path,
+                        thumbnail_sizes=self.thumbnail_sizes,
+                        )
 
             self.add_slide(slide)
 
@@ -456,10 +504,12 @@ class Album:
                  path: str,                 # полный путь альбома в ФС
                  auto_load: bool = True,    # автозагрузка при создании
                  sort_slides: bool = True,  # сортировать слайды в альбоме
+                 thumbnail_sizes: tuple=(), # размеры слайдов
                  ):
         self.slides =[]                     # слайды альбома (список)
         self.name = name
         self.__path = path
+        self.thumbnail_sizes = thumbnail_sizes
 
         # загрузить слайды
         if auto_load:
@@ -514,6 +564,29 @@ def configure_site(site: object) -> None:
             site.keywords_rule = settings[key]
         else:
             site.info[key] = settings[key]
+
+    # Заполнить свойство сайта (словарь) thumbnail_sizes
+    try:
+        thumbnail_sizes = config_site.get_section_dict('thumbnails')
+    except KeyError:
+        return
+    # Преобразуем строку в кортеж int
+    new_thumbnail_sizes = {}
+    for size in thumbnail_sizes:
+        # из строки делаем список размеров
+        sizes = thumbnail_sizes[size].split(',')
+        if len(sizes) > 1:  # берем только, если длина списка не менее 2-х
+            # обрезать до 2-х элементов
+            sizes = sizes[:2]
+            try:
+                new_thumbnail_sizes[size] = (int(sizes[0].strip()),
+                                             int(sizes[1].strip()),
+                                             )
+            except Exception:
+                logger.debug('Ошибка преобразования в кортеж int настройки ' \
+                             + 'размера альбома: ' + size)
+
+    site.thumbnail_sizes = new_thumbnail_sizes
 
 
 def load_pages(site: object) -> None:
@@ -664,6 +737,7 @@ def load_albums(site: object) -> None:
                       path=albums_folders[album_name],
                       auto_load=True,
                       sort_slides=True,
+                      thumbnail_sizes=site.thumbnail_sizes,
                       )
 
         logger.debug(f"Добавление к сайту альбома '{album_name}'" + \

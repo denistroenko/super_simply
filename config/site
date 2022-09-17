@@ -14,3 +14,9 @@
 name = Super Simply
 author = Algorithm Computers
 #domain = localhost
+#
+#
+[thumbnails]
+small=96,96
+middle=200,200
+large=400,400
