@@ -403,16 +403,28 @@ class Page:
 class Thumbnail:
     name = str_value('name')
     src = str_value('src')
+    slide_path = str_value('slide_path')
 
     def __init__(self,
                  path: str,         # Полный путь к эскизу
+                 slide_src: str,    # путь к оригинальному слайду от /static/
                  width: int=0,      # ширина эскиза в пикселях
                  height: int=0,     # высота эскиза в пикселях
                  ):
         self.path = path
+        self.slide_src = slide_src
 
     @property
     def src(self):
+        full_dir = f'{get_script_dir()[:-1]}{os.path.dirname(self.path)}'
+        full_name = f'{get_script_dir()[:-1]}{self.path}'
+        if not os.path.exists(full_dir):
+            os.mkdir(full_dir)
+
+        if not os.path.exists(full_name):
+            # ЗДЕСЬ КОД СОЗДАНИЯ ЭСКИЗОВ
+            pass
+
         return self.path
 
 
@@ -455,9 +467,10 @@ class Slide:
             # имя создать по правилу widh x height имя_слайда
             file_name = os.path.basename(self.src)
             dir_name = os.path.dirname(self.src)
-            path = f'{dir_name}/_thumbnails/{width}x{height}_{file_name}'
+            path = f'{dir_name}/_{width}x{height}_{file_name}'
 
             self.thumbnails[size_name] = Thumbnail(path=path,
+                                                   slide_src=self.src,
                                                    width=width,
                                                    height=height,
                                                    )
