@@ -17,6 +17,6 @@ author = Algorithm Computers
 #
 #
 [thumbnails]
-small=96,96
-middle=200,200
-large=400,400
+small = 96,0
+middle = 200,0
+large = 400,0

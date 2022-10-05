@@ -21,8 +21,11 @@ sys.path.insert(0, get_script_dir())
 sys.path.insert(0, '%scustom' % get_script_dir())
 
 
-# Application
-from main import app as application, main
-
+try:
+    # Application
+    from main import app as application, main
+    main()
+except Exception:
+    pass
 
 main()

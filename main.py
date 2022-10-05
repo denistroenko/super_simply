@@ -27,7 +27,6 @@ def main():
 
     load_app_config()
     mapping_view()
-
     super_simply.configure_site(site)
     super_simply.load_system_pages(site)
     super_simply.load_pages(site)
@@ -91,6 +90,14 @@ def mapping_view():
 
         # Добавить шташрмацию сервера
         site.add_server_info(key='year', info=int(datetime.date.today().year))
+
+        # Заполнить во всех формах скрытые поля с информацией о странице
+        for form in forms:
+            try:
+                forms[form].page_url.data = page_url
+                forms[form].page_name.data = page.name
+            except Exception as i:
+                loggr.error(f'Ошибка заполнения url и названия страницы в форму перед рендером: {e}')
 
         # вернуть html-рендер нужной страницы
         return render_template(page.template, site=site, page=page,

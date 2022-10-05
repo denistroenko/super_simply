@@ -11,13 +11,17 @@ from wtforms.validators import DataRequired, Email
 # Форма обратной связи
 class FeedBackForm(Form):
     # Fields
-    name = StringField('Имя', validators=[DataRequired()])
-    second_name = StringField('Отчество')
-    last_name = StringField('Фамилия')
-    phone = StringField('Телефон', validators=[DataRequired()])
-    email = StringField('email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Отправить')
-    message = StringField('Сообщение')
+    name = StringField('Имя', validators=[DataRequired()])  # Name
+    second_name = StringField('Отчество')                   # Second name
+    last_name = StringField('Фамилия')                      # Last Name
+    phone = StringField('Телефон', validators=[DataRequired()])         # Phone
+    email = StringField('email', validators=[DataRequired(), Email()])  # Email
+    submit = SubmitField('Отправить')                       # Submit
+    message = StringField('Сообщение')                      # Message text
+    # Hidden fields
+    page_url = HiddenField()                                # url
+    page_name = HiddenField()                               # Page name
+    choice = HiddenField()                                  # Choice
 
 
 def get_forms() -> dict:

@@ -2,6 +2,8 @@ import logging
 import glob
 import os.path
 
+from PIL import Image, ImageEnhance
+
 from baseapplib import get_script_dir, configure_logger
 from config import Config
 from values import int_value, str_value, list_value, dict_value, bool_value
@@ -406,24 +408,46 @@ class Thumbnail:
     slide_path = str_value('slide_path')
 
     def __init__(self,
-                 path: str,         # Полный путь к эскизу
+                 path: str,         # путь к эскизу
                  slide_src: str,    # путь к оригинальному слайду от /static/
                  width: int=0,      # ширина эскиза в пикселях
                  height: int=0,     # высота эскиза в пикселях
                  ):
         self.path = path
         self.slide_src = slide_src
+        self.width = width
+        self.height = height
 
     @property
     def src(self):
-        full_dir = f'{get_script_dir()[:-1]}{os.path.dirname(self.path)}'
-        full_name = f'{get_script_dir()[:-1]}{self.path}'
-        if not os.path.exists(full_dir):
-            os.mkdir(full_dir)
+        thumbnail_full_dir = f'{get_script_dir()[:-1]}{os.path.dirname(self.path)}'
+        thumbnail_full_name = f'{get_script_dir()[:-1]}{self.path}'
+        slide_full_name = f'{get_script_dir()[:-1]}{self.slide_src}'
 
-        if not os.path.exists(full_name):
-            # ЗДЕСЬ КОД СОЗДАНИЯ ЭСКИЗОВ
-            pass
+        # Create folder if not exist
+        if not os.path.exists(thumbnail_full_dir):
+            os.mkdir(thumbnail_full_dir)
+
+        # Create thumbnail if file not exist
+        if not os.path.exists(thumbnail_full_name):
+            try:
+                with Image.open(slide_full_name) as im:
+                    if self.height == 0:
+                        width, height = im.size
+                        self.height = int(self.width * height / width)
+
+                    if self.width == 0:
+                        width, height = im.size
+                        self.width = int(self.height * width / height)
+
+                    print(self.height)
+
+                    resized_im = im.resize((self.width, self.height), Image.ANTIALIAS)
+                    resized_im = ImageEnhance.Sharpness(resized_im).enhance(1.5)
+                    resized_im.save(thumbnail_full_name, "JPEG", quality=80)
+                    logger.debug(f'{thumbnail_full_name} {self.width}x{self.height}')
+            except Exception as e:
+                logger.error(f'Не удалось создать thumbnail {self.slide_src}: {e}')
 
         return self.path
 
@@ -460,14 +484,13 @@ class Slide:
 
     def load_thumbnails(self):
         # заполнить свойство thimbnails обхектами эскизов
-
         for size_name in self.thumbnail_sizes:
             width = self.thumbnail_sizes[size_name][0]
             height = self.thumbnail_sizes[size_name][1]
             # имя создать по правилу widh x height имя_слайда
             file_name = os.path.basename(self.src)
             dir_name = os.path.dirname(self.src)
-            path = f'{dir_name}/_{width}x{height}_{file_name}'
+            path = f'{dir_name}/_thumbnail_{width}x{height}_{file_name}'
 
             self.thumbnails[size_name] = Thumbnail(path=path,
                                                    slide_src=self.src,
@@ -506,12 +529,15 @@ class Album:
             files = sorted(files)
 
         for file_path in files:
-            slide=Slide(name=os.path.basename(file_path),
-                        path=file_path,
-                        thumbnail_sizes=self.thumbnail_sizes,
-                        )
+            name = os.path.basename(file_path)
 
-            self.add_slide(slide)
+            if name[:10] != '_thumbnail':
+                slide = Slide(name=name,
+                            path=file_path,
+                            thumbnail_sizes=self.thumbnail_sizes,
+                            )
+
+                self.add_slide(slide)
 
     def __init__(self, name: str,           # имя альбома
                  path: str,                 # полный путь альбома в ФС
