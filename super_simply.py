@@ -313,7 +313,6 @@ class Site:
         while self.is_page(try_path):
             double_pages_postfix += 1
             try_path = '{}-{}'.format(new_path, double_pages_postfix)
-            print(try_path)
 
         new_path = try_path
         return '/%s' % new_path
@@ -439,8 +438,6 @@ class Thumbnail:
                     if self.width == 0:
                         width, height = im.size
                         self.width = int(self.height * width / height)
-
-                    print(self.height)
 
                     resized_im = im.resize((self.width, self.height), Image.ANTIALIAS)
                     resized_im = ImageEnhance.Sharpness(resized_im).enhance(1.5)
