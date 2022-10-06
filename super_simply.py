@@ -457,9 +457,10 @@ class Slide:
     src = str_value('src')
     thumbnails = dict_value('thumbnails')
     thumbnail_sizes = dict_value('thumbnail_sizes')
+    file_name = str_value('file_name')
 
     def __init__(self,
-                 name: str,  # название слайда
+                 file_name: str,  # имя файла передается
                  path: str,  # полный путь к изображению
                  thumbnail_sizes: dict={}, # словарь размеров эскиза
                                            # 'имя':(width: int, height: int)
@@ -467,7 +468,8 @@ class Slide:
 
 
         # имя слайда - без расширения
-        self.name = str(name.split('.')[0])
+        self.name = str(file_name.split('.')[0])  # Имя слайда
+        self.file_name = file_name                # Имя файла (basename)
 
         # путь к файлу - от текущей директории скрипта
         script_dir = get_script_dir()
@@ -526,10 +528,10 @@ class Album:
             files = sorted(files)
 
         for file_path in files:
-            name = os.path.basename(file_path)
+            file_name = os.path.basename(file_path)
 
-            if name[:10] != '_thumbnail':
-                slide = Slide(name=name,
+            if file_name[:10] != '_thumbnail':
+                slide = Slide(file_name=file_name,
                             path=file_path,
                             thumbnail_sizes=self.thumbnail_sizes,
                             )
@@ -551,11 +553,25 @@ class Album:
         if auto_load:
             self.__load_slides(sort_slides=sort_slides)
 
-    def get_path(self):
+    def get_path(self) -> str:
         """
         Метод возвращает полный путь к альбому в рамках ФС
         """
         return(self.__path)
+
+    def get_slide(self, file_name: str='') -> object:
+        """
+        Возвращает слайд по имени файла из альбома
+        """
+
+        if file_name=='':
+            return '#'
+
+        for slide in self.slides:
+            if slide.file_name == file_name:
+                return slide
+
+        return '#'
 
 
 def configure_site(site: object) -> None:

@@ -21,6 +21,10 @@
             {% endfor %}
             <hr><br>
         {% endfor %}
+        
+        <br><br>
+        {{ site.albums['01'].get_slide('Андрей.jpg').thumbnails['small'].src }}<br>
+        <img src="{{ site.albums['01'].get_slide('Андрей.jpg').thumbnails['small'].src }}">
 
 
         <br><br>
