@@ -27,5 +27,3 @@ try:
     main()
 except Exception:
     pass
-
-main()

@@ -23,11 +23,6 @@
         {% endfor %}
         
         <br><br>
-        {{ site.albums['01'].get_slide('Андрей.jpg').thumbnails['small'].src }}<br>
-        <img src="{{ site.albums['01'].get_slide('Андрей.jpg').thumbnails['small'].src }}">
-
-
-        <br><br>
         <form method="POST">
         Ваше имя: 
         {{ forms['feedback'].name(class_='form_name') }}
