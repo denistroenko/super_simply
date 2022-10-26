@@ -12,31 +12,6 @@
 
     <body>
         {% block content %}
-
-        {% for slide in site.albums['01'].slides %}
-        <img src="{{ slide.src }}"><br>
-            {% for thumbnail in slide.thumbnails %}
-                <img src="{{ slide.thumbnails[thumbnail].src }}">
-                <br>
-            {% endfor %}
-            <hr><br>
-        {% endfor %}
-        
-        <br><br>
-        <form method="POST">
-        Ваше имя: 
-        {{ forms['feedback'].name(class_='form_name') }}
-
-        {{ forms['feedback'].phone.label }}
-        {{ forms['feedback'].phone(class_='form_name') }}
-
-        {{ forms['feedback'].email.label }}
-        {{ forms['feedback'].email }}
-        {{ forms['feedback'].message.label }}
-        {{ forms['feedback'].message(class_='form_name') }}
-
-        {{ forms['feedback'].submit(class_='form_submit') }}
-        </form>
         {% endblock %}
     </body>
 

@@ -11,7 +11,9 @@
 #image =
 #icon =
 
-[Главная]
+[Сайт в разработке...]
 path = /
-template = home.html
-aliases=/home, /main
+template = patch.html
+h1 = Скоро открытие нового сайта
+form_header = У Вас есть вопросы?
+content = Оставьте свои контакты, и мы с вами свяжемся в ближайшее рабочее время.

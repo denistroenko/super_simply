@@ -11,9 +11,14 @@
 # description_rule = {page.name}. {site.phone}
 # keywords_rule = {page.name} {site.address}
 
-name = Super Simply
-author = Algorithm Computers
+
 #domain = localhost
-#
-#
+
+name = Super Simply
+author = Super Simply
+
+
 [thumbnails]
+small = 96,96
+medium = 200,0
+large = 800,0
