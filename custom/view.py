@@ -7,7 +7,7 @@ def mapping_view(app: object, site :object):
     @app.route('/', methods=['POST'])
     @app.route('/<path:page_url>', methods=['POST'])
     def form_completed(page_url: str=''):
-        forms = web_forms.get_forms()
+        forms = web_forms.get_forms(request.url, '')
         feedback_form = forms['feedback']
 
         session['name'] = feedback_form.name.data

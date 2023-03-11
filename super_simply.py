@@ -227,13 +227,12 @@ class Site:
 
         pages = self.get_pages()
 
-        # перебрать все страницы и найти совпадение id с path, alias или id
-        for page in pages:
-            if (id == page.path or
-                id in page.aliases or
-                id == page.id):
+        # генерация списка страниц, удовлетворяющих условию
+        valid_pages = [page for page in pages if (
+                page.id == id or page.path == id or id in page.aliases)]
 
-                return page
+        if valid_pages:
+            return valid_pages[0]
 
         # Вернуть страницу 404
         if return_404:
@@ -350,6 +349,7 @@ class Page:
     image = str_value('image')
     icon = str_value('icon')
     info = dict_value('info')
+    code = int_value('code')
 
     def __init__(self,
                  name: str,             # имя страницы для ссылок
@@ -366,6 +366,7 @@ class Page:
                  image: str = '',       # относительный путь к картинке
                  icon: str = '',        # относитеьный путь к иконке
                  info: dict = {},       # любая прочая информация (словарь)
+                 code: int = 200,       # код ответа html-сервера для страницы
                  ):
         logger.debug('Инициализация <Page>')
 
@@ -385,6 +386,7 @@ class Page:
         self.image =  image
         self.icon = icon
         self.info = info
+        self.code = code
 
         self.subpages = []
 
@@ -727,6 +729,7 @@ def load_pages(site: object) -> None:
                         aliases=aliases,
                         image=image,
                         icon=icon,
+                        code=200,
                         )
         if len(info)>0:
             new_page.info = info
@@ -742,6 +745,7 @@ def load_system_pages(site: object) -> None:
     new_page = Page(name='error 404',
                     path='/_404',
                     template='_404.html',
+                    code = 404,
                     )
     site.add_system_page(page=new_page, key='_404')
 

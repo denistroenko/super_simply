@@ -17,3 +17,13 @@ template = patch.html
 h1 = Скоро открытие нового сайта
 form_header = У Вас есть вопросы?
 content = Оставьте свои контакты, и мы с вами свяжемся в ближайшее рабочее время.
+
+[О компании...]
+template = patch.html
+
+[Контакты]
+template = patch.html
+
+[Услуги]
+template = patch.html
+aliases = /servises,     /test

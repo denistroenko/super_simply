@@ -4,7 +4,7 @@ __version__ = '0.0.1'
 import logging
 import datetime
 from typing import Optional
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, redirect, request
 from baseapplib import configure_logger, get_script_dir, PasswordGenerator
 from config import Config
 import super_simply
@@ -76,9 +76,6 @@ def mapping_view():
 
         logger.debug('Запрошена страница %s' % page_url)
 
-        # получить формы (контекст запроса)
-        forms = web_forms.get_forms()
-
         # получить страницу сайта
         page = site.get_page(page_url)
 
@@ -88,20 +85,19 @@ def mapping_view():
                 logger.debug('Возвращается специальная страница сайта.')
                 page = site.system_pages[key]
 
-        # Добавить шташрмацию сервера
+        # получить формы (контекст запроса)
+        forms = web_forms.get_forms(request.url, page.name)
+
+        # Добавить информацию сервера
         site.add_server_info(key='year', info=int(datetime.date.today().year))
 
-        # Заполнить во всех формах скрытые поля с информацией о странице
-        for form in forms:
-            try:
-                forms[form].page_url.data = page_url
-                forms[form].page_name.data = page.name
-            except Exception as i:
-                loggr.error(f'Ошибка заполнения url и названия страницы в форму перед рендером: {e}')
+        # если запрошен path алиаса страницы, сделать 301-й редирект на ее path
+        if page_url in page.aliases:
+            return redirect(page.path, 301)
 
         # вернуть html-рендер нужной страницы
         return render_template(page.template, site=site, page=page,
-                session=session, forms=forms)
+                session=session, forms=forms), page.code
 
 
 if __name__ == '__main__':

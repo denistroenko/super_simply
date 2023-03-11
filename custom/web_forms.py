@@ -24,11 +24,13 @@ class FeedBackForm(Form):
     choice = HiddenField()                                  # Choice
 
 
-def get_forms() -> dict:
+def get_forms(url: str, page_name: str) -> dict:
     """
     return dict custom forms
     """
     feedback_form = FeedBackForm()
+    feedback_form.page_name.data = page_name
+    feedback_form.page_url.data = url
 
     forms = {'feedback': feedback_form,}
 
