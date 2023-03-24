@@ -26,4 +26,4 @@ template = patch.html
 
 [Услуги]
 template = patch.html
-aliases = /servises,     /test
+aliases = /servises, /test

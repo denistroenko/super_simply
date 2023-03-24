@@ -20,10 +20,11 @@ def get_script_dir(follow_symlinks=True):
 sys.path.insert(0, get_script_dir())
 sys.path.insert(0, '%scustom' % get_script_dir())
 
+# import application
+from main import app as application, main
 
+# run app
 try:
-    # Application
-    from main import app as application, main
     main()
 except Exception:
     pass

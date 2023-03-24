@@ -4,7 +4,7 @@ __version__ = '0.0.1'
 import logging
 import datetime
 from typing import Optional
-from flask import Flask, render_template, session, redirect, request
+from flask import Flask, render_template, session, redirect
 from baseapplib import configure_logger, get_script_dir, PasswordGenerator
 from config import Config
 import super_simply
@@ -63,6 +63,10 @@ def mapping_view():
     # custom views in ./custom/views
     view.mapping_view(app, site)
 
+    @app.route('/static/')
+    def show_static():
+        pass
+
     # standard views for all pages
     @app.route('/')
     @app.route('/<path:page_url>')
@@ -85,8 +89,11 @@ def mapping_view():
                 logger.debug('Возвращается специальная страница сайта.')
                 page = site.system_pages[key]
 
+        if site.is_page(page.path):
+            session['page.name'] = page.name
+
         # получить формы (контекст запроса)
-        forms = web_forms.get_forms(request.url, page.name)
+        forms = web_forms.get_forms()
 
         # Добавить информацию сервера
         site.add_server_info(key='year', info=int(datetime.date.today().year))

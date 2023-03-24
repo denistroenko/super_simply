@@ -3,10 +3,10 @@ custom forms module
 """
 
 
+from flask import request, session
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Email
-
 
 # Форма обратной связи
 class FeedBackForm(Form):
@@ -19,19 +19,26 @@ class FeedBackForm(Form):
     submit = SubmitField('Отправить')                       # Submit
     message = StringField('Сообщение')                      # Message text
     # Hidden fields
-    page_url = HiddenField()                                # url
+    url = HiddenField()                                     # url
+    base_url = HiddenField()                                # base_url
     page_name = HiddenField()                               # Page name
     choice = HiddenField()                                  # Choice
 
 
-def get_forms(url: str, page_name: str) -> dict:
+def get_forms() -> dict:
     """
     return dict custom forms
     """
     feedback_form = FeedBackForm()
-    feedback_form.page_name.data = page_name
-    feedback_form.page_url.data = url
+    feedback_form.url.data = request.url
+    feedback_form.base_url.data = request.base_url
 
-    forms = {'feedback': feedback_form,}
+    try:
+        feedback_form.page_name.data = session['page.name']
+    except KeyError:
+        feedback_form.page_name.data  = '?'
+
+    forms = {'feedback': feedback_form,
+             }
 
     return forms

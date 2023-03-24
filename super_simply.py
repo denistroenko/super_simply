@@ -443,6 +443,7 @@ class Thumbnail:
 
                     resized_im = im.resize((self.width, self.height), Image.ANTIALIAS)
                     resized_im = ImageEnhance.Sharpness(resized_im).enhance(1.5)
+                    resized_im = resized_im.convert('RGB')
                     resized_im.save(thumbnail_full_name, "JPEG", quality=80)
                     logger.debug(f'{thumbnail_full_name} {self.width}x{self.height}')
             except Exception as e:

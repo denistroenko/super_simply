@@ -10,5 +10,9 @@
     <p style="text-align: center;">
         {{ session.name }}, спасибо, Ваша заявка принята.</br>
         Мы перезвоним Вам по номеру телефона {{ session.phone }} в ближайшее рабочее время!</p><br>
+
+        {% for key in session %}
+        {{ key }} = {{ session[key] }} <br>
+        {% endfor %}
 </div>
 {% endblock %}
