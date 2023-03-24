@@ -102,9 +102,13 @@ def mapping_view():
         if page_url in page.aliases:
             return redirect(page.path, 301)
 
-        # вернуть html-рендер нужной страницы
-        return render_template(page.template, site=site, page=page,
+        try:
+            # вернуть html-рендер нужной страницы
+            return render_template(page.template, site=site, page=page,
                 session=session, forms=forms), page.code
+        except Exception as e:
+            e = str(e)
+            return f'Ошибка в шаблоне {page.template}:<br> {e}'
 
 
 if __name__ == '__main__':
