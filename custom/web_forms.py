@@ -6,6 +6,7 @@ custom forms module
 from flask import request, session
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SubmitField, HiddenField
+from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired, Email
 
 # Форма обратной связи
@@ -17,7 +18,7 @@ class FeedBackForm(Form):
     phone = StringField('Телефон', validators=[DataRequired()])         # Phone
     email = StringField('email', validators=[DataRequired(), Email()])  # Email
     submit = SubmitField('Отправить')                       # Submit
-    message = StringField('Сообщение')                      # Message text
+    message = StringField('Сообщение', widget=TextArea())   # Message text
     # Hidden fields
     url = HiddenField()                                     # url
     base_url = HiddenField()                                # base_url
