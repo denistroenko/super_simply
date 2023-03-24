@@ -441,15 +441,18 @@ class Thumbnail:
                         width, height = im.size
                         self.width = int(self.height * width / height)
 
-                    resized_im = resized_im.convert('RGB')
                     resized_im = im.resize((self.width, self.height), Image.ANTIALIAS)
-                    resized_im = ImageEnhance.Sharpness(resized_im).enhance(1.5)
-                    resized_im.save(thumbnail_full_name, "JPEG", quality=80)
+                    if thumbnail_full_name.split('.')[-1].lower() == 'png':
+                        resized_im.save(thumbnail_full_name, "PNG", quality=80)
+                    else:
+                        resized_im = ImageEnhance.Sharpness(resized_im).enhance(1.5)
+                        resized_im.save(thumbnail_full_name, "JPEG", quality=80)
+
                     logger.debug(f'{thumbnail_full_name} {self.width}x{self.height}')
             except Exception as e:
                 logger.error(f'Не удалось создать thumbnail {self.slide_src}: {e}')
 
-        return self.path
+return self.path
 
 
 class Slide:
