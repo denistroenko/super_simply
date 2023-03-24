@@ -450,9 +450,10 @@ class Thumbnail:
 
                     logger.debug(f'{thumbnail_full_name} {self.width}x{self.height}')
             except Exception as e:
+
                 logger.error(f'Не удалось создать thumbnail {self.slide_src}: {e}')
 
-return self.path
+        return self.path
 
 
 class Slide:
