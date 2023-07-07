@@ -18,11 +18,11 @@ configure_logger(logger,
 # Site config
 config_site = Config()
 config_site.read_file(config_file='%sconfig/site' % get_script_dir(),
-                      comment='#')
+                      comment=';')
 # Pages config
 config_pages = Config()
 config_pages.read_file(config_file='%sconfig/pages' % get_script_dir(),
-                       comment='#')
+                       comment=';')
 
 
 class Site:
