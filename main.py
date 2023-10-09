@@ -4,7 +4,8 @@ __version__ = '0.0.1'
 import logging
 import datetime
 from typing import Optional
-from flask import Flask, render_template, session, redirect
+from flask import (Flask, render_template, session, redirect,
+        send_from_directory, request)
 from baseapplib import configure_logger, get_script_dir, PasswordGenerator
 from config import Config
 import super_simply
@@ -63,9 +64,9 @@ def mapping_view():
     # custom views in ./custom/views
     view.mapping_view(app, site)
 
-    @app.route('/static/')
+    @app.route('/robots.txt')
     def show_static():
-        pass
+        return send_from_directory(app.static_folder, request.path[1:])
 
     # standard views for all pages
     @app.route('/')
