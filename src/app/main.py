@@ -1,30 +1,33 @@
 __version__ = '0.0.1'
 
 
-import logging
 import datetime
 from typing import Optional
+
 from flask import (Flask, render_template, session, redirect,
         send_from_directory, request)
-from baseapplib import configure_logger, get_script_dir, PasswordGenerator
-from config import Config
+
+from tools import (get_logger, configure_logger, get_app_dir,
+        PasswordGenerator, Config)
+
 import super_simply
 import custom
 from custom import web_forms, view
 
 
 # GLOBAL
-logger = logging.getLogger(__name__)  # logger
 app = Flask(__name__)                 # app
+app_dir = get_app_dir(False)
+logger = get_logger(__name__)  # logger
 site = super_simply.Site()            # site
 app_config = Config()                 # app_config
 
 
 def main():
     configure_logger(logger,
-                     debug_file_name=f'{get_script_dir()}log/debug.log',
-                     error_file_name=f'{get_script_dir()}log/error.log',
-                     start_msg='\n\n#  Приложение запущено  #')
+                     debug_file=f'{app_dir}log/debug.log',
+                     error_file_name=f'{app_dir}log/error.log',
+                     )
 
     load_app_config()
     mapping_view()
@@ -37,7 +40,7 @@ def main():
 
 def load_app_config():
     # прочитать настройки приложения из файла
-    app_config.read_file(f'{get_script_dir()}config/app')
+    app_config.read_file(f'{app_dir}config/app')
     # найти параметр секретного ключа
     try:
         secret_key = app_config.get('app', 'secret_key')
@@ -49,7 +52,7 @@ def load_app_config():
         secret_key = password_generator.get_new_password()
 
         app_config.set('app', 'secret_key', secret_key)
-        app_config.write_file(f'{get_script_dir()}config/app')
+        app_config.write_file(f'{app_dir}config/app')
     app.config['SECRET_KEY'] = secret_key
     app.config['SRF_ENABLED'] = True
 
@@ -98,6 +101,13 @@ def mapping_view():
 
         # Добавить информацию сервера
         site.add_server_info(key='year', info=int(datetime.date.today().year))
+
+        for form in forms:
+            try:
+                forms[form].page_url.data = page_url
+                forms[form].page_name.data = page.name
+            except Exception:
+                pass
 
         # если запрошен path алиаса страницы, сделать 301-й редирект на ее path
         if page_url in page.aliases:

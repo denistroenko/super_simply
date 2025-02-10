@@ -4,9 +4,9 @@ import os.path
 
 from PIL import Image, ImageEnhance
 
-from baseapplib import get_script_dir, configure_logger
-from config import Config
-from values import int_value, str_value, list_value, dict_value, bool_value
+from tools import get_script_dir, configure_logger
+from tools import config as Config
+from tools.values import int_value, str_value, list_value, dict_value, bool_value
 
 
 # Global
@@ -446,6 +446,7 @@ class Thumbnail:
                         resized_im.save(thumbnail_full_name, "PNG", quality=80)
                     else:
                         resized_im = ImageEnhance.Sharpness(resized_im).enhance(1.5)
+                        resized_im = ImageEnhance.Color(resized_im).enhance(1.3)
                         resized_im.save(thumbnail_full_name, "JPEG", quality=80)
 
                     logger.debug(f'{thumbnail_full_name} {self.width}x{self.height}')
